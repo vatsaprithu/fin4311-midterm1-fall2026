@@ -319,10 +319,13 @@
     <h2 id="setupTitle">Device setup check</h2>
     <p>This is an ungraded device check, with no real exam questions. No name or email is required. It does not create an exam attempt.</p>
     <p id="setupStatus"></p>
+    <details><summary>TA restriction tests — these links must be blocked in the supplied setup configuration</summary>
+      <p>Use only during a supervised device test. Opening any of these pages in native SEB is a failed URL-filter test. An ordinary browser preview does not test this restriction.</p>
+      <ul><li><a href="https://www.example.com/">Test blocking an outside website</a></li><li><a href="home-practice.html">Test blocking home practice and worked answers</a></li><li><a href="practice.html">Test blocking a different page in this repository</a></li></ul>
+    </details>
     <p>Open the calculator and compute 120 / 4. Open the spreadsheet, enter 100 in A1, 20 in A2, and =SUM(A1:A2) in A3. Confirm that A3 displays 120. Use the keyboard and resize the panels as needed.</p>
     <button type="button" id="setupDownload">Download a practice file</button>
-    <p>Verify that a JSON file is saved to your device. Then, with the proctor's permission, use the exit link below. If any step fails, tell the proctor before exam day.</p>
-    <a href="quit.html">Leave the setup check in SEB</a>
+    <p>Verify that a JSON file is saved to your device. Then ask the proctor to exit SEB using its Quit control (Ctrl+Q on Windows or Command+Q on Mac) and the private quit password. If any step fails, tell the proctor before exam day.</p>
     <p id="setupNote" role="status"></p>
   </section>
   <section id="exam" hidden aria-label="Exam questions">
@@ -346,7 +349,7 @@
     <button type="button" id="downloadBtn">Download final submission</button>
     <button type="button" id="restartPractice" hidden>Start a new practice session</button>
     <p id="downloadStatus" role="status"></p>
-    <p><a href="quit.html">Leave the exam in SEB after proctor approval</a></p>
+    <p>When your file has saved, ask the proctor to use SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and enter the private quit password.</p>
   </section>
   <p class="privacy-note">Local saving only. Clearing browser data, changing devices, or losing the SEB browser profile can remove saved work. Tell the proctor promptly if anything fails.</p>
 </main>
@@ -542,7 +545,7 @@ async function download() {
   const stem=currentState.email.split('@')[0].replace(/[^a-z0-9_-]/gi,'_');
   const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':''}${stem}.json`;
   triggerDownload(filename,file);
-  $('downloadStatus').textContent='Download requested: '+filename+'. Confirm that the file was saved, then upload it to Blackboard.';
+  $('downloadStatus').textContent='Download requested: '+filename+(PRACTICE ? '. Confirm that the practice file was saved; follow the instructor\'s rehearsal instructions.' : '. Confirm that the file was saved, then upload it to Blackboard.');
 }
 function triggerDownload(filename,data) {
   const url=URL.createObjectURL(new Blob([data],{type:'application/json'})), a=document.createElement('a'); a.href=url;a.download=filename; document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
