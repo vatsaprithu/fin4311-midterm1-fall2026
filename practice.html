@@ -1,0 +1,1294 @@
+<!DOCTYPE html><html lang="en-US"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer"><title>FIN 4311 Midterm Exam 1</title><style>
+  :root {
+    --brand:#1F3864; --brand-light:#2E75B6; --accent:#f0a500;
+    --bg:#f7f9fc; --card:#ffffff; --border:#d5dde8;
+    --ok:#14804a; --ok-bg:#e3f5ec;
+    --err:#b42318; --err-bg:#fdecea;
+    --muted:#667085;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:var(--bg); color:#1a1a1a; line-height:1.5;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
+  }
+  input, textarea { -webkit-user-select:text; -moz-user-select:text; -ms-user-select:text; user-select:text; }
+  .wrap { max-width:820px; margin:0 auto; padding:28px 20px 80px; transition: max-width .2s; }
+  body.quiz-active .wrap { max-width:1200px !important; }
+  header.banner {
+    background:linear-gradient(135deg,var(--brand),var(--brand-light));
+    color:white; padding:28px 24px; border-radius:12px;
+    margin-bottom:20px; box-shadow:0 4px 14px rgba(31,56,100,.15);
+  }
+  header.banner h1 { margin:0 0 6px; font-size:22px; font-weight:700; }
+  header.banner p { margin:0; opacity:.92; font-size:14px; }
+  .card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:10px; padding:22px 24px; margin-bottom:18px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  h2 { color:var(--brand); font-size:18px; margin:0 0 12px; }
+  h3 { color:var(--brand); font-size:15px; margin:0 0 6px; }
+  label { font-weight:600; font-size:14px; display:block; margin-bottom:6px; }
+  input[type="text"], input[type="email"] {
+    width:100%; padding:10px 12px; font-size:15px; font-family:inherit;
+    border:1px solid var(--border); border-radius:6px; transition:border-color .15s;
+  }
+  input:focus { outline:none; border-color:var(--brand-light); box-shadow:0 0 0 3px rgba(46,117,182,.15); }
+  .form-row { margin-bottom:14px; }
+  button {
+    background:var(--brand); color:white; border:none;
+    padding:12px 24px; font-size:15px; font-weight:600;
+    border-radius:6px; cursor:pointer; font-family:inherit;
+    transition:background .15s;
+  }
+  button:hover { background:var(--brand-light); }
+  button:disabled { background:#aaa; cursor:not-allowed; }
+  .q {
+    padding:16px 18px; border:1px solid var(--border);
+    border-radius:8px; margin-bottom:16px; background:#fff;
+  }
+  .q.correct { background:var(--ok-bg); border-color:var(--ok); }
+  .q.incorrect { background:var(--err-bg); border-color:var(--err); }
+  .q-num { color:var(--brand-light); font-size:13px; font-weight:700; margin-bottom:4px; }
+  .q-text { font-size:15px; margin-bottom:10px; font-weight:500; }
+  .choices label {
+    display:block; padding:8px 12px; border:1px solid var(--border);
+    border-radius:6px; margin-bottom:6px; cursor:pointer; font-weight:400;
+    font-size:14px; background:#fafbfd; transition:all .1s;
+  }
+  .choices label:hover { background:#eef2f8; }
+  .choices input { margin-right:8px; }
+  .choices label.correct-ans { background:var(--ok-bg); border-color:var(--ok); font-weight:600; }
+  .choices label.wrong-ans { background:var(--err-bg); border-color:var(--err); }
+
+  /* ===== One-at-a-time quiz layout ===== */
+  .q-single { display:none; }
+  .q-single.active { display:block; }
+  .q-layout {
+    display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start;
+  }
+  .q-left { }
+  .q-right { }
+  .scenario-box {
+    background:#f0f4f8; border:1px solid var(--border); border-left:4px solid var(--brand);
+    border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:13.5px; line-height:1.55;
+    max-height:400px; overflow-y:auto;
+  }
+  .scenario-box strong { color:var(--brand); }
+  .q-nav {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:18px; padding-top:14px; border-top:1px solid var(--border);
+  }
+  .q-nav button { min-width:120px; }
+  .q-nav .progress { font-size:13px; color:var(--muted); font-weight:600; }
+  .q-dots {
+    display:flex; gap:6px; flex-wrap:wrap; justify-content:center;
+    margin:10px 0;
+  }
+  .q-dots .dot {
+    width:28px; height:28px; border-radius:50%; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; cursor:pointer; transition:all .15s;
+    background:#fff; color:var(--muted);
+  }
+  .q-dots .dot.current { border-color:var(--brand); background:var(--brand); color:#fff; }
+  .q-dots .dot.answered { border-color:var(--ok); background:var(--ok-bg); color:var(--ok); }
+  .q-dots .dot.answered.current { background:var(--brand); color:#fff; }
+  .q-dots .dot.locked { border-color:#999; background:#e0e0e0; color:#666; opacity:.7; }
+  @media (max-width:800px) {
+    .q-layout { grid-template-columns:1fr; }
+  }
+  .explanation {
+    margin-top:10px; padding:10px 14px; background:#fff;
+    border-left:3px solid var(--brand-light); font-size:13px; color:#333; border-radius:4px;
+  }
+  .result-hero {
+    padding:30px 24px; text-align:center; border-radius:10px; margin-bottom:18px;
+  }
+  .result-hero.pass { background:var(--ok-bg); border:2px solid var(--ok); }
+  .result-hero.fail { background:var(--err-bg); border:2px solid var(--err); }
+  .result-hero .big { font-size:48px; font-weight:800; margin:8px 0; }
+  .result-hero.pass .big { color:var(--ok); }
+  .result-hero.fail .big { color:var(--err); }
+  .result-hero .label {
+    display:inline-block; padding:6px 16px; border-radius:20px;
+    font-weight:700; font-size:14px; letter-spacing:.5px;
+  }
+  .result-hero.pass .label { background:var(--ok); color:white; }
+  .result-hero.fail .label { background:var(--err); color:white; }
+  .muted { color:var(--muted); font-size:13px; }
+  .warn {
+    background:#fff8e1; border-left:4px solid var(--accent);
+    padding:12px 14px; margin:12px 0; font-size:14px; border-radius:4px;
+  }
+  .rules {
+    background:#fee; border:2px solid var(--err);
+    padding:16px 20px; margin:14px 0; border-radius:8px;
+  }
+  .rules h3 { color:var(--err); margin-bottom:8px; }
+  .rules ul { margin:8px 0; padding-left:22px; }
+  .rules li { margin-bottom:6px; font-size:14px; }
+  .info-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0;
+  }
+  .info-pill {
+    background:#eef2f8; padding:10px 14px; border-radius:6px; font-size:13px;
+  }
+  .info-pill strong { display:block; color:var(--brand); margin-bottom:2px; }
+  .hidden { display:none !important; }
+  .deadline-ticker {
+    background:var(--brand); color:white; text-align:center;
+    padding:8px; font-size:13px; font-weight:600; border-radius:6px; margin-bottom:14px;
+  }
+  .countdown-good { background:var(--ok); }
+  .countdown-warn { background:var(--accent); color:#111; }
+  .countdown-closed { background:var(--err); }
+  .violations {
+    background:#fff0f0; border:1px solid var(--err); padding:8px 12px;
+    border-radius:6px; font-size:12px; color:var(--err); margin:10px 0;
+  }
+  .agree-row { margin-top:14px; padding:12px; background:#f7f9fc; border-radius:6px; }
+  .agree-row label { display:flex; align-items:flex-start; gap:8px; font-size:14px; font-weight:400; cursor:pointer; }
+  .agree-row input[type="checkbox"] { margin-top:3px; }
+  @media (max-width:600px) {
+    .info-grid { grid-template-columns:1fr; }
+    .result-hero .big { font-size:36px; }
+  }
+
+  /* ===== Built-in Calculator / Scratchpad (during quiz only) ===== */
+  #calcPanel {
+    position: fixed; top: 90px; right: 20px; width: 280px;
+    background: #fff; border: 2px solid var(--brand); border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.15); z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    display: none;
+  }
+  #calcPanel.open { display: block; }
+  #calcPanel .header {
+    background: var(--brand); color: white; padding: 8px 12px;
+    border-radius: 8px 8px 0 0; font-weight: 700; font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: move;
+  }
+  #calcPanel .body { padding: 10px; }
+  #calcInput, #calcScratch {
+    width: 100%; font-family: "Courier New", monospace; font-size: 14px;
+    padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px;
+  }
+  #calcScratch { height: 120px; resize: vertical; margin-top: 6px; }
+  #calcResult {
+    padding: 8px 10px; margin-top: 6px; background: #eef2f8;
+    border-radius: 4px; font-family: "Courier New", monospace; font-size: 16px;
+    font-weight: 700; color: var(--brand); text-align: right; min-height: 20px;
+  }
+  #calcPanel .hint {
+    font-size: 11px; color: var(--muted); margin-top: 4px;
+  }
+  #calcPanel button.close-x {
+    background: transparent; color: white; border: none; font-size: 18px;
+    padding: 0 4px; cursor: pointer;
+  }
+  #calcPanel .keys {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;
+  }
+  #calcPanel .keys button {
+    padding: 8px 0; font-size: 14px; background: #f0f2f5;
+    color: #111; border: 1px solid #d0d6df; border-radius: 4px; cursor: pointer;
+  }
+  #calcPanel .keys button:hover { background: #e0e4eb; }
+  #calcPanel .keys button.op { background: #e6eef8; color: var(--brand); font-weight: 700; }
+  #calcPanel .keys button.clear { background: #fdecea; color: var(--err); font-weight: 700; }
+  #calcToggle {
+    position: fixed; top: 20px; right: 20px; z-index: 9998;
+    background: var(--brand); color: white; border: none;
+    padding: 10px 16px; font-size: 14px; font-weight: 700;
+    border-radius: 6px; cursor: pointer; display: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+  #calcToggle.visible { display: block; }
+
+  /* ===== Timer bar during quiz ===== */
+  #timerBar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
+    padding: 10px 16px; background: var(--brand); color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    font-size: 15px; font-weight: 700; text-align: center;
+    display: none; box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  #timerBar.visible { display: block; }
+  #timerBar.warning { background: var(--accent); color: #111; animation: pulse 1s infinite; }
+  #timerBar.expired { background: var(--err); color: white; animation: pulse 0.6s infinite; }
+  @keyframes pulse { 0%{opacity:1;} 50%{opacity:.7;} 100%{opacity:1;} }
+  body.quiz-active { padding-top: 44px; }
+  .q-text table.data { border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  .q-text table.data th, .q-text table.data td { border: 1px solid var(--border); padding: 4px 10px; text-align: right; }
+  .q-text table.data th:first-child, .q-text table.data td:first-child { text-align: left; }
+  .q-text table.data th { background: #eef2f8; }
+  .submitted-box { text-align: center; padding: 28px 20px; }
+  .submitted-box .big { font-size: 40px; font-weight: 800; color: var(--brand); }
+  /* toggles sit below the fixed timer bar during the exam */
+  body.quiz-active #calcToggle { top: 52px; }
+  #sheetToggle {
+    position: fixed; top: 20px; right: 160px; z-index: 9998;
+    background: #14804a; color: white; border: none; padding: 10px 16px; font-size: 14px; font-weight: 700;
+    border-radius: 6px; cursor: pointer; display: none; box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+  body.quiz-active #sheetToggle { top: 52px; }
+  #sheetToggle.visible { display: block; }
+  #sheetPanel {
+    position: fixed; top: 100px; left: 20px; width: 880px; height: 440px; min-width: 360px; min-height: 200px;
+    background: #fff; border: 2px solid #14804a; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    z-index: 9999; display: none; flex-direction: column; resize: both; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  #sheetPanel.open { display: flex; }
+  #sheetHeader { background: #14804a; color: #fff; padding: 6px 10px; cursor: move; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; }
+  #sheetHeader button { background: transparent; color: #fff; border: none; font-size: 18px; cursor: pointer; padding: 0 4px; }
+  #sheetBar { display: flex; gap: 6px; align-items: center; padding: 5px 8px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  #sheetRef { min-width: 46px; font-weight: 700; color: #14804a; white-space: nowrap; }
+  #sheetFx { flex: 1; font-family: Consolas, monospace; font-size: 13px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; }
+  #sheetGridWrap { flex: 1; overflow: auto; }
+  #sheetGrid { border-collapse: collapse; font-size: 13px; }
+  #sheetGrid th { background: #eef2f8; border: 1px solid #c9d2df; font-weight: 600; color: #444; padding: 2px 4px; position: sticky; top: 0; z-index: 1; min-width: 28px; }
+  #sheetGrid th.rowh { position: sticky; left: 0; z-index: 2; }
+  #sheetGrid td { border: 1px solid #d5dde8; padding: 0; }
+  #sheetGrid input { width: 84px; border: none; padding: 3px 5px; font-size: 13px; text-align: right; font-family: inherit; background: transparent; }
+  #sheetGrid input:focus { outline: 2px solid #14804a; background: #f3fbf6; text-align: left; }
+  #sheetGrid input.err { color: var(--err); }
+  #sheetGrid input.sel { background: #dcefe3; }
+  #sheetGrid input.sel:focus { background: #f3fbf6; }
+  #sheetFillBtns { font-size: 12px; color: #444; white-space: nowrap; }
+  #sheetFillBtns button { padding: 3px 8px; font-size: 13px; margin-left: 2px; background: #eef2f8; color: #1f2d3d; border: 1px solid #c9d2df; border-radius: 4px; }
+  #sheetTip { height: 18px; font: 12px/18px Consolas, monospace; color: #333; border-bottom: 1px solid var(--border); padding: 1px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #sheetTip.show { background: #fffbe6; }
+  #sheetTip b { color: #14804a; }
+  #sheetHint { font-size: 11px; color: var(--muted); padding: 3px 8px; border-top: 1px solid var(--border); }
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+</style></head><body>
+<div id="timerBar" aria-label="Exam timer">Time remaining</div>
+<button type="button" id="calcToggle" onclick="document.getElementById('calcPanel').classList.toggle('open')">🧮 Calculator</button>
+<div id="calcPanel">
+  <div class="header" id="calcHeader">
+    <span>🧮 Calculator &amp; Scratchpad</span>
+    <button class="close-x" onclick="document.getElementById('calcPanel').classList.remove('open')">×</button>
+  </div>
+  <div class="body">
+    <input type="text" id="calcInput" placeholder="Type an expression, then press Enter" autocomplete="off">
+    <div id="calcResult">0</div>
+    <div class="keys">
+      <button onclick="calcAppend('7')">7</button><button onclick="calcAppend('8')">8</button><button onclick="calcAppend('9')">9</button><button class="op" onclick="calcAppend('/')">÷</button>
+      <button onclick="calcAppend('4')">4</button><button onclick="calcAppend('5')">5</button><button onclick="calcAppend('6')">6</button><button class="op" onclick="calcAppend('*')">×</button>
+      <button onclick="calcAppend('1')">1</button><button onclick="calcAppend('2')">2</button><button onclick="calcAppend('3')">3</button><button class="op" onclick="calcAppend('-')">−</button>
+      <button onclick="calcAppend('0')">0</button><button onclick="calcAppend('.')">.</button><button onclick="calcEval()">=</button><button class="op" onclick="calcAppend('+')">+</button>
+      <button onclick="calcAppend('(')">(</button><button onclick="calcAppend(')')">)</button><button class="clear" onclick="calcBackspace()">⌫</button><button class="clear" onclick="calcClear()">C</button>
+    </div>
+    <div class="hint">Examples: <code>6570000/365</code>, <code>(720+540)-(410+120)</code></div>
+    <textarea id="calcScratch" placeholder="Scratchpad — use this for multi-step work."></textarea>
+  </div>
+</div>
+
+<!-- ===== Built-in Spreadsheet ===== -->
+<button type="button" id="sheetToggle" onclick="toggleSheet()">📊 Spreadsheet</button>
+<div id="sheetPanel">
+  <div id="sheetHeader"><span>📊 Spreadsheet (drag to move, corner to resize)</span><button onclick="toggleSheet(false)">×</button></div>
+  <div id="sheetBar"><span id="sheetRef">A1</span><input id="sheetFx" placeholder="Value or formula, e.g. =B2*C2/365 or =SUM(B2:B5)" autocomplete="off"><span id="sheetFillBtns">Fill <button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('down')" title="Fill down (Ctrl+D): copies the top cell of the selection into the cells below">↓</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('up')" title="Fill up: copies the bottom cell of the selection into the cells above">↑</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('right')" title="Fill right (Ctrl+R): copies the left cell of the selection into the cells to its right">→</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('left')" title="Fill left: copies the right cell of the selection into the cells to its left">←</button></span><button type="button" onclick="sheetClear()" style="padding:4px 10px;font-size:12px;background:#fdecea;color:var(--err);">Clear all</button></div>
+  <div id="sheetTip" aria-live="polite"></div>
+  <div id="sheetGridWrap"><table id="sheetGrid"></table></div>
+  <div id="sheetHint">Formulas start with = &nbsp;•&nbsp; + - * / ^ % ( ) &nbsp;•&nbsp; ranges like B2:B5 &nbsp;•&nbsp; $ locks a reference: $B$1 &nbsp;•&nbsp; Enter = down, Tab = right &nbsp;•&nbsp; F2 or double-click edits a cell<br>Select cells (drag or Shift+click), then Ctrl+D fills down, Ctrl+R fills right, or use the Fill buttons &nbsp;•&nbsp; Ctrl+Enter fills the selection &nbsp;•&nbsp; Ctrl+Z undoes &nbsp;•&nbsp; on a Mac use Control, not Command<br>While typing a formula, click or drag over cells to insert them &nbsp;•&nbsp; SUM AVERAGE MIN MAX SUMPRODUCT ROUND ROUNDUP INT ABS EXP IF &nbsp;•&nbsp; PMT RATE NPER PV FV (type =PV( to see its arguments)</div>
+</div>
+
+<a class="skip-link" href="#main">Skip to exam content</a>
+<main id="main" class="wrap">
+  <header class="banner">
+    <h1>FIN 4311 — Bank Management</h1>
+    <p>Classroom SEB rehearsal · 4 questions · Ungraded · No time limit</p>
+  </header>
+  <section id="landing" class="card"><h2>Classroom SEB rehearsal</h2><p>This is an in-class device rehearsal for Tuesday October 13. It has four short examples to practice the software workflow. Open Practice.seb in Safe Exam Browser. No real exam access code is needed. These questions do not reproduce the graded exam.</p><p>Enter your name and UTEP email. Work and progress stay in this browser; nothing is uploaded automatically. Use the built-in tools, enter answers, reload and resume, finalize, and download a practice file. A practice download is not a graded submission.</p>
+<div class="form-row"><label for="studentName">Full name</label><input id="studentName" type="text" autocomplete="off"></div>
+<div class="form-row"><label for="studentEmail">UTEP email</label><input id="studentEmail" type="email" autocomplete="off"></div>
+<input id="accessCode" type="password" hidden aria-label="Unused practice access code">
+<details id="proctorControls"><summary>Instructor browser preview</summary><p>Student classroom practice uses SEB. Instructor preview in a regular browser requires the proctor code.</p><label for="examMode">Session mode</label><select id="examMode"><option value="exam">Practice</option><option value="preview">Instructor preview</option></select><label for="proctorCode">Proctor code for instructor preview</label><input id="proctorCode" type="password" autocomplete="off"></details>
+<input id="approvedMinutes" type="number" value="80" hidden aria-label="Unused practice duration">
+<div class="check-row"><input id="agree" type="checkbox"><label for="agree">I understand this is ungraded practice with local saving.</label></div>
+<button id="beginBtn" type="button">Begin or resume practice</button><p id="landingError" role="alert" class="error"></p></section>
+  <section id="setup" class="card" hidden aria-labelledby="setupTitle">
+    <h2 id="setupTitle">Device setup check</h2>
+    <p>This is an ungraded device check, with no real exam questions. No name or email is required. It does not create an exam attempt.</p>
+    <p id="setupStatus"></p>
+    <p>Open the calculator and compute 120 / 4. Open the spreadsheet, enter 100 in A1, 20 in A2, and =SUM(A1:A2) in A3. Confirm that A3 displays 120. Use the keyboard and resize the panels as needed.</p>
+    <button type="button" id="setupDownload">Download a practice file</button>
+    <p>Verify that a JSON file is saved to your device. Then, with the proctor's permission, use the exit link below. If any step fails, tell the proctor before exam day.</p>
+    <a href="quit.html">Leave the setup check in SEB</a>
+    <p id="setupNote" role="status"></p>
+  </section>
+  <section id="exam" hidden aria-label="Exam questions">
+    <p id="previewFlag" class="notice" hidden>INSTRUCTOR PREVIEW — UNGRADED</p>
+    <p id="saveStatus" role="status">Saving locally</p>
+    <nav id="questionNav" aria-label="Jump to a question"></nav>
+    <div id="questions"></div>
+    <section id="submitCard" class="card" aria-labelledby="submitTitle">
+      <h2 id="submitTitle">Final submission</h2>
+      <p>Check your answers and working before submitting. After submission, answer entry is frozen. You can download the same final file again if needed.</p>
+      <div class="check-row"><input id="ready" type="checkbox"><label for="ready">I am ready to finalize my answers.</label></div>
+      <button type="button" id="submitBtn">Finalize answers</button><p id="submitError" role="alert" class="error"></p>
+    </section>
+  </section>
+  <section id="finished" class="card" hidden aria-labelledby="finishedTitle" tabindex="-1">
+    <h2 id="finishedTitle">Answers finalized</h2>
+    <p id="finishedReason"></p>
+    <p id="objectiveNotice"></p>
+    <div id="selfGrade" hidden></div>
+    <p><strong>Download the practice file if you want to rehearse saving it. This is not an actual exam submission.</strong> Do not close this page until your file has saved. All answers and spreadsheet work are included in that file. The instructor grades the written questions.</p>
+    <button type="button" id="downloadBtn">Download final submission</button>
+    <button type="button" id="restartPractice" hidden>Start a new practice session</button>
+    <p id="downloadStatus" role="status"></p>
+    <p><a href="quit.html">Leave the exam in SEB after proctor approval</a></p>
+  </section>
+  <p class="privacy-note">Local saving only. Clearing browser data, changing devices, or losing the SEB browser profile can remove saved work. Tell the proctor promptly if anything fails.</p>
+</main>
+<style>
+  body {user-select:text; color:#202124; font-size:16px;}
+  .wrap {max-width:1000px!important; padding-top:24px;}
+  header.banner {background:#1f3864; box-shadow:none;}
+  header.banner h1 {font-size:26px;}
+  header.banner p, label {font-size:16px;}
+  h2 {font-size:22px;} h3 {font-size:18px;}
+  p, li {line-height:1.55;} li {margin-bottom:7px;}
+  button, input, select, textarea {font:inherit;}
+  button {cursor:pointer; min-height:36px;}
+  input[type=password], input[type=number], select {padding:9px; border:1px solid #667085; border-radius:4px;}
+  input[type=checkbox] {width:20px; height:20px; flex-shrink:0;}
+  .check-row {display:flex; align-items:flex-start; gap:10px; margin:18px 0;}
+  label {font-weight:600;}
+  textarea.answer {width:100%; min-height:76px; padding:10px; border:1px solid #667085; border-radius:4px; resize:vertical;}
+  textarea.work {min-height:130px;}
+  .field {margin:18px 0;}
+  .card table {border-collapse:collapse; width:100%; margin:16px 0;}
+  .card th,.card td {padding:9px; border:1px solid #667085; text-align:left;}
+  .card th {background:#eef2f8;}
+  caption {text-align:left; font-weight:600; margin-bottom:8px;}
+  #questionNav {display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;}
+  #questionNav a {padding:7px 12px; border:1px solid #1f3864; border-radius:4px; background:#fff; color:#1f3864;}
+  .notice {background:#fff3c4; color:#333; padding:12px; border:1px solid #826100;}
+  .error {color:#a51d15;} .privacy-note {font-size:14px; color:#404b5b;}
+  .skip-link {position:absolute; top:-100px; left:12px; background:white; padding:10px; z-index:12000;}
+  .skip-link:focus {top:5px;}
+  :focus-visible {outline:3px solid #0b62ad!important; outline-offset:3px;}
+  [hidden] {display:none!important;}
+  #timerBar {text-align:left; padding-right:360px;}
+  #calcToggle,#sheetToggle {z-index:10003;top:5px; background:#fff;color:#1f3864;border:1px solid #667085;padding:5px 10px;font-size:15px;}
+  #calcToggle {right:12px;} #sheetToggle {right:168px;}
+  body.quiz-active #calcToggle,body.quiz-active #sheetToggle {top:5px;}
+  #timerBar.warning,#timerBar.expired {animation:none;}
+  #calcPanel,#sheetPanel {z-index:11002;max-width:96vw; max-height:85vh;overflow:auto;}
+  .card,h2 {scroll-margin-top:110px;}
+  #calcPanel .hint,#sheetHint {font-size:13px; color:#404b5b;}
+  #calcPanel .header button,#sheetHeader button {font-size:20px; min-width:36px;}
+  #calcInput,#sheetFx {font-size:16px!important;}
+  #calcScratch {font-size:15px;}
+  .panel-reset {position:fixed; top:48px; right:10px; z-index:10001; color:#1f3864; background:white; padding:6px; border:1px solid #667085;}
+  @media(max-width:720px) {#timerBar {padding-right:8px; padding-bottom:50px;} body.quiz-active{padding-top:92px;} body.quiz-active #calcToggle,body.quiz-active #sheetToggle{top:44px;} .panel-reset {top:86px;} .wrap{padding-left:10px;padding-right:10px;} .card{padding:16px;} }
+</style>
+<script>
+const SETTINGS = {"examId": "FIN4311_CLASS_DEMO_V1", "schema": "FIN4311-written-v1", "start": "2026-10-15T10:30:00-06:00", "end": "2026-10-15T11:50:00-06:00", "questionDigest": "aeb221efbd17851d6882d013b251579499644b5fe05e52664963be2af085f291", "proctorSalt": "b2c1db9a4478c5adbf662ccfc051d1c6", "proctorHash": "8237d5f56c997879c4fb5e9b738915903958020004207a91b89baff316dfef8c", "practice": true, "selfGrading": false, "requireSEB": true};
+const ENCRYPTED = null;
+const PRACTICE = {"examId": "FIN4311_CLASS_DEMO_V1", "questions": [{"id": "q1", "title": "Recover a Treasury bill discount quote", "points": 2, "prompt": "A 90-day Treasury bill with $500,000 face value is purchased for $493,750 and held to maturity. Use a 360-day year. Find the dollar discount and then recover the annual bank discount yield from the price. This is an ungraded practice calculation.", "fields": [{"id": "q1a", "label": "a. Dollar discount from face value", "points": 1, "kind": "text"}, {"id": "q1b", "label": "b. Annual bank discount yield", "points": 1, "kind": "text"}]}, {"id": "q2", "title": "A credit line draw", "points": 2, "prompt": "A business has a $4,000,000 credit line with $1,000,000 already drawn. It draws another $750,000 today. Assume no repayments or limit changes. This ungraded example checks how a commitment becomes a funded loan; no fee calculation is required.", "fields": [{"id": "q2a", "label": "a. Funded loan balance after the new draw", "points": 1, "kind": "text"}, {"id": "q2b", "label": "b. Remaining undrawn commitment", "points": 1, "kind": "text"}]}, {"id": "q3", "title": "Coupon payments on a bond", "points": 2, "prompt": "A bond has a face value of $1,500 and a 4.00% annual coupon rate. It pays equal coupons twice a year. Ignore changes in the bond price. This question is only a device rehearsal.", "fields": [{"id": "q3a", "label": "a. Total coupon dollars paid in one year", "points": 1, "kind": "text"}, {"id": "q3b", "label": "b. Dollars paid at each six-month coupon date", "points": 1, "kind": "text"}]}, {"id": "q4", "title": "A simple income calculation", "points": 2, "prompt": "For this ungraded tool check, a small bank branch has $250,000 of interest income, $140,000 of interest expense, $35,000 of fee income and $95,000 of operating expense in a year. Ignore taxes. Use the calculator or spreadsheet to find total income, total expense and the remaining profit.", "fields": [{"id": "q4a", "label": "a. Total income", "points": 0.5, "kind": "text"}, {"id": "q4b", "label": "b. Total expense", "points": 0.5, "kind": "text"}, {"id": "q4c", "label": "c. Profit before taxes", "points": 1, "kind": "text"}]}]};
+let currentState = null, currentKey = '', questions = [];
+let sessionFrozen = false, timerId = null, startedInThisPage = false;
+const enc = new TextEncoder();
+const $ = id => document.getElementById(id);
+const esc = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const from64 = s => Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const stamp = () => new Date().toISOString();
+async function sha(value) {return [...new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(value)))].map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function proctorOK(code) {return !!code && await sha(SETTINGS.proctorSalt + '|' + code) === SETTINGS.proctorHash;}
+function saveState(key,state) {
+  if (!key || !state) return;
+  try {localStorage.setItem(key,JSON.stringify(state)); if($('saveStatus')) $('saveStatus').textContent='Saved locally at '+new Date().toLocaleTimeString();}
+  catch {if($('saveStatus')) {$('saveStatus').textContent='LOCAL SAVE FAILED — tell the proctor now. Keep this page open and download when finished.'; $('saveStatus').classList.add('error');}}
+}
+function eventLog(type,detail='') {if(!currentState || currentState.finalizedAt) return; currentState.events.push({at:stamp(),type,detail}); saveState(currentKey,currentState);}
+function activeExam() {return !!currentState && !currentState.finalizedAt && !sessionFrozen;}
+async function decrypt(code) {
+  const b = from64(ENCRYPTED), salt=b.slice(0,16), iv=b.slice(16,28);
+  const material=await crypto.subtle.importKey('raw',enc.encode(code),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv},key,b.slice(28))));
+}
+function renderQuestions() {
+  $('questionNav').innerHTML=questions.map(q=>`<a href="#${q.id}">${q.id.slice(1)} · ${q.points} pts</a>`).join('');
+  $('questions').innerHTML=questions.map(q=>{
+    let content=`<section class="card" id="${q.id}" aria-labelledby="${q.id}_title"><h2 id="${q.id}_title">${q.id.slice(1)}. ${esc(q.title)} <span>(${q.points} points)</span></h2><p>${esc(q.prompt)}</p>`;
+    if(q.table) content+=`<table><caption>Auction bids</caption><thead><tr>${q.table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${q.table.rows.map(row=>`<tr>${row.map((v,i)=>`<${i?'td':'th scope="row"'}>${esc(v)}</${i?'td':'th'}>`).join('')}</tr>`).join('')}</tbody></table>`;
+    if(q.definitions) {
+      content+='<h3>Part A — match definitions</h3><p>Choose one letter for each item. Each definition is used once. Each match is worth 0.25 point.</p><dl>'+q.definitions.map(([letter,text])=>`<dt><strong>Definition ${letter}</strong></dt><dd>${esc(text)}</dd>`).join('')+'</dl>';
+    }
+    for(const f of q.fields) {
+      if(f.id==='q6r1') content+='<h3>Part B — order the supplied rates</h3><table><caption>Hypothetical annual rates for this question</caption><thead><tr><th scope="col">Rate or facility</th><th scope="col">Supplied annual rate</th></tr></thead><tbody>'+q.rates.map(([term,rate])=>`<tr><th scope="row">${esc(term)}</th><td>${rate.toFixed(2)}%</td></tr>`).join('')+'</tbody></table><p>Choose 1 for the lowest value, then 2, 3, 4, and 5 for the highest value. Give tied rates the same rank. Both highest rates receive rank 5. Each correct rank is worth 0.25 point.</p>';
+      content+=`<div class="field"><label for="${f.id}">${esc(f.label)} (${f.points} pt)</label>`;
+      content+=f.kind==='select' ? `<select id="${f.id}" data-answer="${f.id}"><option value="">Select an answer</option>${f.options.map(([v,label])=>`<option value="${esc(v)}">${esc(label)}</option>`).join('')}</select>` : `<textarea class="answer" id="${f.id}" data-answer="${f.id}" spellcheck="false" maxlength="15000"></textarea>`;
+      content+='</div>';
+    }
+    if(!q.definitions&&!SETTINGS.selfGrading) content+=`<div class="field"><label for="${q.id}_work">Calculations and explanation for question ${q.id.slice(1)} — include formulas or spreadsheet cell references</label><textarea class="answer work" id="${q.id}_work" data-answer="${q.id}_work" spellcheck="false" maxlength="25000"></textarea></div>`;
+    return content+'</section>';
+  }).join('');
+  document.querySelectorAll('[data-answer]').forEach(el=>{
+    el.value=currentState.answers[el.dataset.answer] || '';
+    const keep=()=>{if(!activeExam()) return; if(currentState.deadline&&Date.now()>=currentState.deadline){finalize('time expired');return;} currentState.answers[el.dataset.answer]=el.value; saveState(currentKey,currentState);};
+    el.addEventListener('input',keep); el.addEventListener('change',keep);
+  });
+}
+function captureTools() {
+  if(!currentState || currentState.finalizedAt) return;
+  sheetCommitPending();
+  currentState.sheet={...sheet}; currentState.scratchpad=$('calcScratch').value; currentState.calculator=$('calcInput').value;
+}
+function valuesFromSheet() {
+  sheetMemo = new Map();
+  try {return Object.fromEntries(Object.keys(sheet).map(id=>{let value;try{value=sheetValue(id,new Set());if(typeof value==='number'&&!Number.isFinite(value))value='#NONFINITE';}catch(e){value=String(e.message);}return[id,value];}));}
+  finally {sheetMemo=null;}
+}
+function freezeTools() {
+  ['sheetPanel','calcPanel'].forEach(id=>$(id).querySelectorAll('input,textarea,button').forEach(el=>{el.disabled=true;}));
+  $('calcToggle').disabled=true; $('sheetToggle').disabled=true;
+  $('calcPanel').classList.remove('open'); $('sheetPanel').classList.remove('open');
+}
+function showFinished() {
+  sessionFrozen=true; clearInterval(timerId); freezeTools();
+  $('landing').hidden=true; $('exam').hidden=true; $('finished').hidden=false;
+  $('timerBar').classList.add('visible','expired'); $('timerBar').textContent='Answers finalized — download your submission file';
+  $('finishedReason').textContent=(currentState.mode==='preview'?'INSTRUCTOR PREVIEW — UNGRADED. ':'')+'Finalized '+new Date(currentState.finalizedAt).toLocaleString()+' ('+currentState.reason+').';
+  $('objectiveNotice').textContent='Your instructor will grade this 25-point exam. No score is released in the browser.';
+  if(SETTINGS.practice){$('objectiveNotice').textContent='This is an ungraded device rehearsal. Its file is not a graded exam submission.';$('restartPractice').hidden=false;}
+  if(SETTINGS.selfGrading){
+    let score=0,total=0;
+    const feedback=questions.map(q=>{const f=q.fields[0],chosen=currentState.answers[f.id]||'',correct=chosen===f.correct;total+=f.points;if(correct)score+=f.points;const chosenLabel=(f.options.find(o=>o[0]===chosen)||['','Unanswered'])[1],rightLabel=f.options.find(o=>o[0]===f.correct)[1];return `<section><h3>${q.id.slice(1)}. ${esc(q.title)} — ${correct?'Correct':'Review'}</h3><p>Your answer: ${esc(chosenLabel)}</p><p>Correct answer: ${esc(rightLabel)}</p><p>${esc(f.solution)}</p></section>`;}).join('');
+    currentState.practiceScore={score,total};saveState(currentKey,currentState);
+    $('objectiveNotice').textContent=`Home practice score: ${score} / ${total} (${Math.round(100*score/total)}%). This is practice, not a course grade.`;
+    $('selfGrade').hidden=false;$('selfGrade').innerHTML='<h2>Worked feedback</h2>'+feedback;
+  }
+  $('finished').focus();
+}
+async function finalize(reason) {
+  if(!activeExam()) return;
+  captureTools();
+  currentState.computedSheet=valuesFromSheet();
+  currentState.events.push({at:stamp(),type:'finalized',detail:reason});
+  currentState.finalizedAt=stamp(); currentState.reason=reason;
+  saveState(currentKey,currentState); showFinished();
+}
+function tick() {
+  if(!activeExam()) return;
+  if(SETTINGS.practice){$('timerBar').textContent='Ungraded SEB rehearsal · answers save only in this browser';return;}
+  const remaining=currentState.deadline-Date.now();
+  if(remaining<=0) {finalize('time expired');return;}
+  const sec=Math.ceil(remaining/1000);
+  $('timerBar').textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')} remaining · ${currentState.name} · closes ${new Date(currentState.deadline).toLocaleTimeString()}`;
+  $('timerBar').classList.toggle('warning',remaining<300000);
+}
+async function begin() {
+  $('landingError').textContent=''; $('beginBtn').disabled=true;
+  try {
+    const name=$('studentName').value.trim(), email=$('studentEmail').value.trim().toLowerCase(), code=$('accessCode').value.trim();
+    if(!name || !/^[^\s@]+@(miners\.)?utep\.edu$/.test(email)) throw Error('Enter your full name and UTEP email.');
+    if(!$('agree').checked) throw Error('Read and acknowledge the exam rules.');
+    const mode=SETTINGS.practice&&$('examMode').value!=='preview'?'practice':$('examMode').value, minutes=Number($('approvedMinutes').value), pc=$('proctorCode').value.trim();
+    if(!Number.isInteger(minutes) || minutes<80 || minutes>240) throw Error('Approved minutes must be an integer from 80 to 240.');
+    const authorized = await proctorOK(pc);
+    if((mode==='preview'||minutes!==80) && !authorized) throw Error('The proctor must authorize preview or extended time.');
+    if(mode!=='preview' && SETTINGS.requireSEB!==false && !/SEB\//i.test(navigator.userAgent)) throw Error('Open this session using the Safe Exam Browser file.');
+    const key=SETTINGS.examId+'|'+mode+'|'+email;
+    let previous; try {previous=JSON.parse(localStorage.getItem(key)||'null');}catch{throw Error('Saved data could not be read. Tell the proctor.');}
+    if(previous && previous.schema!==SETTINGS.schema) throw Error('Saved work uses a different exam version. Tell the proctor.');
+    const now=Date.now(), allowedEnd=Date.parse(SETTINGS.end)+(minutes-80)*60000;
+    if(mode==='exam' && !previous && (now<Date.parse(SETTINGS.start) || now>=allowedEnd)) throw Error('The exam is outside its permitted window.');
+    let payload;try {payload=SETTINGS.practice?PRACTICE:await decrypt(code);}catch{throw Error('The exam code is incorrect, or the encrypted file could not be opened.');}
+    if(payload.examId!==SETTINGS.examId) throw Error('Incorrect exam package.');
+    questions=payload.questions; currentKey=key;
+    currentState=previous || {schema:SETTINGS.schema,examId:SETTINGS.examId,questionDigest:SETTINGS.questionDigest,mode,name,email,startedAt:stamp(),deadline:SETTINGS.practice?null:mode==='preview'?now+minutes*60000:Math.min(now+minutes*60000,allowedEnd),approvedMinutes:SETTINGS.practice?null:minutes,answers:{},sheet:{},scratchpad:'',calculator:'',events:[]};
+    if(previous && currentState.questionDigest!==SETTINGS.questionDigest) throw Error('The question version changed. Tell the proctor before proceeding.');
+    sessionFrozen=!!currentState.finalizedAt;
+    if(previous) eventLog('resume','Same browser profile; original deadline retained.');
+    else eventLog('start',minutes!==80?'Proctor authorized '+minutes+' minutes.':'Standard 80-minute limit.');
+    $('accessCode').value=''; $('proctorCode').value='';
+    if(currentState.finalizedAt) {showFinished(); return;}
+    $('landing').hidden=true; $('exam').hidden=false; $('previewFlag').hidden=mode!=='preview';
+    document.body.classList.add('quiz-active'); $('timerBar').classList.add('visible');
+    renderQuestions(); sheetLoad(); $('calcScratch').value=currentState.scratchpad||''; $('calcInput').value=currentState.calculator||''; calcTryEval();
+    startedInThisPage=true; tick(); timerId=setInterval(tick,500);
+    if(activeExam()) $('q1_title').scrollIntoView({block:'start'});
+    saveState(currentKey,currentState);
+  } catch(e) {$('landingError').textContent=e.message;}
+  finally {$('beginBtn').disabled=false;}
+}
+function payloadForDownload() {
+  return {schema:SETTINGS.schema,examId:SETTINGS.examId,questionDigest:SETTINGS.questionDigest,
+    mode:currentState.mode,name:currentState.name,email:currentState.email,
+    startedAt:currentState.startedAt,deadline:currentState.deadline?new Date(currentState.deadline).toISOString():null,approvedMinutes:currentState.approvedMinutes,
+    finalizedAt:currentState.finalizedAt,reason:currentState.reason,
+    answers:currentState.answers,spreadsheet:{raw:currentState.sheet,computed:currentState.computedSheet||{}},
+    scratchpad:currentState.scratchpad,calculator:currentState.calculator,events:currentState.events,
+    ...(SETTINGS.selfGrading?{practiceScore:currentState.practiceScore}: {})};
+}
+async function download() {
+  if(!currentState || !currentState.finalizedAt) return;
+  const data=payloadForDownload(), payload=JSON.stringify(data), checksum=await sha(payload);
+  const file=JSON.stringify({checksumAlgorithm:'SHA-256 corruption check — not a digital signature',checksum,payload},null,2);
+  const stem=currentState.email.split('@')[0].replace(/[^a-z0-9_-]/gi,'_');
+  const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':''}${stem}.json`;
+  triggerDownload(filename,file);
+  $('downloadStatus').textContent='Download requested: '+filename+'. Confirm that the file was saved, then upload it to Blackboard.';
+}
+function triggerDownload(filename,data) {
+  const url=URL.createObjectURL(new Blob([data],{type:'application/json'})), a=document.createElement('a'); a.href=url;a.download=filename; document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+$('beginBtn').addEventListener('click',begin);
+$('submitBtn').addEventListener('click',()=>{if(!$('ready').checked){$('submitError').textContent='Check the finalization box after reviewing your answers.';return;}finalize('student submitted');});
+$('downloadBtn').addEventListener('click',download);
+$('restartPractice').addEventListener('click',()=>{if(SETTINGS.practice&&currentKey){localStorage.removeItem(currentKey);location.reload();}});
+window.addEventListener('blur',()=>{if(activeExam())eventLog('window blur');});
+window.addEventListener('focus',()=>{if(activeExam()){eventLog('window focus');tick();}});
+document.addEventListener('visibilitychange',()=>{if(activeExam()){eventLog('visibility',document.visibilityState);tick();}});
+window.addEventListener('beforeunload',()=>{if(activeExam()){captureTools();eventLog('page unloading');saveState(currentKey,currentState);}});
+document.addEventListener('keydown',e=>{
+  if(!activeExam())return;
+  if(currentState.deadline&&Date.now()>=currentState.deadline){e.preventDefault();finalize('time expired');return;}
+  const k=e.key.toLowerCase();
+  if((e.ctrlKey||e.metaKey)&&['p','s','u'].includes(k) || k==='f12'){e.preventDefault();eventLog('blocked shortcut',e.key);}
+});
+document.addEventListener('beforeinput',e=>{if(activeExam()&&currentState.deadline&&Date.now()>=currentState.deadline){e.preventDefault();finalize('time expired');}},true);
+function initApplication() {
+  $('calcToggle').classList.add('visible');$('sheetToggle').classList.add('visible');
+  // Formula cells and scratch work save on input, including an unfinished active edit.
+  $('sheetGrid').addEventListener('input',e=>{if(!activeExam() || !e.target.dataset.id)return; sheet[e.target.dataset.id]=e.target.value; currentState.sheet={...sheet};saveState(currentKey,currentState);});
+  $('sheetFx').addEventListener('input',()=>{if(activeExam()){sheet[sheetSel]=$('sheetFx').value;currentState.sheet={...sheet};saveState(currentKey,currentState);}});
+  $('calcScratch').addEventListener('input',()=>{if(activeExam()){currentState.scratchpad=$('calcScratch').value;saveState(currentKey,currentState);}});
+  $('calcInput').addEventListener('input',()=>{if(activeExam()){currentState.calculator=$('calcInput').value;saveState(currentKey,currentState);}});
+  $('calcInput').setAttribute('aria-label','Calculator expression'); $('calcScratch').setAttribute('aria-label','Scratchpad'); $('sheetFx').setAttribute('aria-label','Spreadsheet formula bar');
+  $('calcResult').setAttribute('role','status');
+  $('calcPanel').setAttribute('role','region');$('calcPanel').setAttribute('aria-label','Calculator and scratchpad');
+  $('sheetPanel').setAttribute('role','region');$('sheetPanel').setAttribute('aria-label','Spreadsheet');
+  $('sheetGrid').insertAdjacentHTML('afterbegin','<caption class="sr-only">Spreadsheet cells A1 through Z99</caption>');
+  document.querySelectorAll('#sheetGrid input').forEach(el=>el.setAttribute('aria-label','Spreadsheet cell '+el.dataset.id));
+  document.querySelectorAll('#sheetGrid th').forEach(el=>el.setAttribute('scope',el.classList.contains('rowh')?'row':'col'));
+  document.querySelectorAll('#calcPanel .close-x,#sheetHeader button').forEach(el=>el.setAttribute('aria-label','Close panel'));
+  document.querySelectorAll('#sheetFillBtns button').forEach((el,i)=>el.setAttribute('aria-label',['Fill down','Fill up','Fill right','Fill left'][i]));
+  document.querySelectorAll('#calcPanel button').forEach(el=>{if(el.textContent==='⌫')el.setAttribute('aria-label','Backspace');if(el.textContent==='C')el.setAttribute('aria-label','Clear calculator');});
+  const reset=document.createElement('button');reset.type='button';reset.className='panel-reset';reset.textContent='Reset tool positions';reset.addEventListener('click',()=>{['calcPanel','sheetPanel'].forEach(id=>{const p=$(id);p.style.left='';p.style.top='';p.style.right='';p.style.width='';p.style.height='';});});document.body.append(reset);
+  if(new URLSearchParams(location.search).get('check')==='1') {
+    $('landing').hidden=true;$('setup').hidden=false;
+    $('setupStatus').textContent=/SEB\//i.test(navigator.userAgent)?'SEB user-agent marker detected. Complete the checks below.':'SEB marker not detected. This browser preview checks the tools only; open the SetupCheck.seb file for the actual device check.';
+    $('setupDownload').addEventListener('click',()=>{sheetCommitPending();triggerDownload('FIN4311_Setup_Practice.json',JSON.stringify({setupOnly:true,at:stamp(),sheet},null,2));$('setupNote').textContent='Practice download requested. This is not an exam submission.';});
+  }
+}
+</script>
+<script>
+function calcAppend(s) { const inp = document.getElementById("calcInput"); inp.value += s; inp.focus(); calcTryEval(); if(currentState && !currentState.finalizedAt){currentState.calculator=document.getElementById('calcInput').value;saveState(currentKey,currentState);} }
+function calcClear() { document.getElementById("calcInput").value = ""; document.getElementById("calcResult").textContent = "0"; if(currentState && !currentState.finalizedAt){currentState.calculator="";saveState(currentKey,currentState);} }
+function calcBackspace() { const inp = document.getElementById("calcInput"); inp.value = inp.value.slice(0, -1); calcTryEval(); if(currentState && !currentState.finalizedAt){currentState.calculator=document.getElementById('calcInput').value;saveState(currentKey,currentState);} }
+function calcEval() { calcTryEval(); if(currentState && !currentState.finalizedAt){currentState.calculator=document.getElementById('calcInput').value;saveState(currentKey,currentState);} }
+function calcTryEval() {
+  const expr=document.getElementById('calcInput').value.trim().replace(/,/g,'');
+  const out=document.getElementById('calcResult');
+  if(!expr){out.textContent='0';return;}
+  if(!/^[0-9+\-*/^%().eE\s]+$/.test(expr)){out.textContent='Use numbers and arithmetic operators only';return;}
+  try {const result=sheetEval(expr,new Set());out.textContent=typeof result==='number'&&Number.isFinite(result)?result.toLocaleString(undefined,{maximumFractionDigits:10}):'?';}
+  catch {out.textContent='Check the expression';}
+}
+(function initCalc() {
+  const inp = document.getElementById("calcInput");
+  inp.addEventListener("input", calcTryEval);
+  inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); calcEval(); } });
+  const panel = document.getElementById("calcPanel"), header = document.getElementById("calcHeader");
+  let dragging = false, ox = 0, oy = 0;
+  header.addEventListener("mousedown", (e) => { dragging = true; const r = panel.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; });
+  document.addEventListener("mousemove", (e) => { if (!dragging) return; panel.style.left = (e.clientX - ox) + "px"; panel.style.top = (e.clientY - oy) + "px"; panel.style.right = "auto"; });
+  document.addEventListener("mouseup", () => { dragging = false; });
+})();
+
+// =================== SPREADSHEET ===================
+const SHEET_COLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), SHEET_ROWS = 99;
+let sheet = {};          // raw contents by cell id, e.g. { B2: "=A2*3" }
+let sheetSel = "A1";
+let SHEET_HINT = "";
+
+function toggleSheet(force) {
+  const p = document.getElementById("sheetPanel");
+  const open = force === undefined ? !p.classList.contains("open") : force;
+  p.classList.toggle("open", open);
+  if (open) sheetCellInput(sheetSel).focus();
+}
+function sheetCellInput(id) { return document.getElementById("sc_" + id); }
+
+function sheetBuild() {
+  const g = document.getElementById("sheetGrid");
+  let html = "<tr><th class='rowh'></th>" + SHEET_COLS.map(c => `<th>${c}</th>`).join("") + "</tr>";
+  for (let r = 1; r <= SHEET_ROWS; r++) {
+    html += `<tr><th class="rowh">${r}</th>` + SHEET_COLS.map(c => `<td><input id="sc_${c}${r}" data-id="${c}${r}" autocomplete="off"></td>`).join("") + "</tr>";
+  }
+  g.innerHTML = html;
+  g.querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("focus", () => {
+      sheetSel = inp.dataset.id; inp.value = sheet[sheetSel] || ""; inp.dataset.edit = ""; inp.select();   // typing replaces, as in Excel
+      sheetEnd = sheetSel; sheetShowBar(); sheetPaintSel();
+    });
+    inp.addEventListener("input", () => { document.getElementById("sheetFx").value = inp.value; sheetTip(inp); });
+    inp.addEventListener("keyup", () => sheetTip(inp));
+    inp.addEventListener("mouseup", () => { if (inp === document.activeElement) sheetTip(inp); });
+    inp.addEventListener("blur", () => { sheetTip(null); sheetCommit(inp.dataset.id, inp.value); });
+    inp.addEventListener("keydown", (e) => {
+      if (sheetKey(e, inp)) return;
+      if (e.key === "Enter") { e.preventDefault(); sheetMove(inp.dataset.id, 0, e.shiftKey ? -1 : 1); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); sheetMove(inp.dataset.id, 0, 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); sheetMove(inp.dataset.id, 0, -1); }
+      else if (e.key === "Escape") { inp.value = sheet[inp.dataset.id] || ""; inp.blur(); }
+    });
+  });
+  g.addEventListener("mousedown", (e) => {
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (!inp || !inp.dataset.id) return;
+    const a = document.activeElement;
+    const editor = a && (a.id === "sheetFx" || (a.dataset && a.dataset.id)) ? a : null;
+    if (editor && inp !== editor && sheetPointable(editor)) {          // typing a formula: insert this cell's reference
+      e.preventDefault();
+      sheetPoint = { el: editor, start: editor.selectionStart, len: editor.selectionEnd - editor.selectionStart, anchor: inp.dataset.id };
+      sheetPointTo(inp.dataset.id);
+      return;
+    }
+    if (e.shiftKey && a && a.dataset && a.dataset.id) { e.preventDefault(); sheetEnd = inp.dataset.id; sheetPaintSel(); return; }
+    sheetDragFrom = inp.dataset.id;
+    if (inp === a) {
+      sheetEnd = sheetSel; sheetPaintSel();
+      if (!sheetEditing(inp)) { e.preventDefault(); inp.select(); }   // clicking the active cell again keeps it ready for typing
+    } else { e.preventDefault(); inp.focus(); }
+  });
+  g.addEventListener("dblclick", (e) => {     // double-click edits: cursor at the end, as Excel does
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (inp && inp === document.activeElement) { inp.dataset.edit = "1"; const n = inp.value.length; inp.setSelectionRange(n, n); }
+  });
+  g.addEventListener("mouseover", (e) => {
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (sheetPoint) {
+      if (!(e.buttons & 1)) { sheetPoint = null; return; }
+      if (inp && inp.dataset.id) sheetPointTo(inp.dataset.id);
+      return;
+    }
+    if (!sheetDragFrom) return;
+    if (!(e.buttons & 1)) { sheetDragFrom = null; return; }
+    if (inp && inp.dataset.id && inp.dataset.id !== sheetEnd) { sheetEnd = inp.dataset.id; sheetPaintSel(); }
+  });
+  g.addEventListener("dragstart", (e) => e.preventDefault());   // never drag a cell's text into another cell
+  document.addEventListener("mouseup", () => { sheetDragFrom = null; sheetPoint = null; });
+  const fx = document.getElementById("sheetFx");
+  let fxTarget = null;
+  fx.addEventListener("focus", () => { fxTarget = sheetSel; });
+  fx.addEventListener("blur", () => {          // an edit made in the formula bar is kept when the student clicks elsewhere
+    sheetTip(null);
+    if (fxTarget && fx.value.trim() !== (sheet[fxTarget] || "")) sheetCommit(fxTarget, fx.value);
+  });
+  fx.addEventListener("input", () => { const c = sheetCellInput(sheetSel); if (c) c.value = fx.value; sheetTip(fx); });
+  fx.addEventListener("keyup", () => sheetTip(fx));
+  fx.addEventListener("mouseup", () => sheetTip(fx));
+  fx.addEventListener("keydown", (e) => {
+    const k = (e.key || "").toLowerCase();
+    if (e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey && (k === "d" || k === "r")) { e.preventDefault(); sheetFill(k === "d" ? "down" : "right"); return; }
+    if (e.key === "Enter") { e.preventDefault(); sheetCommit(sheetSel, fx.value); sheetMove(sheetSel, 0, 1); }
+  });
+}
+function sheetShowBar() {
+  document.getElementById("sheetRef").textContent = sheetSel;
+  document.getElementById("sheetFx").value = sheet[sheetSel] || "";
+}
+function sheetMove(id, dc, dr) {
+  const c = SHEET_COLS.indexOf(id[0]), r = parseInt(id.slice(1), 10);
+  const nc = Math.min(Math.max(c + dc, 0), SHEET_COLS.length - 1);
+  const nr = Math.min(Math.max(r + dr, 1), SHEET_ROWS);
+  sheetCellInput(SHEET_COLS[nc] + nr).focus();
+}
+// =================== SELECTION AND FILL ===================
+// As in Excel: drag, Shift+click or Shift+arrows select a range; Ctrl+D fills down, Ctrl+R fills right,
+// the Fill buttons fill in any direction; Ctrl+Enter puts one entry in every selected cell.
+// "$" locks the column or row of a reference ($B$1, $B1, B$1). While typing a formula, clicking or dragging
+// over cells inserts their reference.
+let sheetEnd = "A1";          // far corner of the selection; the active cell (sheetSel) is the other corner
+let sheetDragFrom = null;     // set while the mouse is selecting
+let sheetPoint = null;        // set while a clicked or dragged reference is being inserted into a formula
+let sheetUndo = null;         // earlier contents of the cells changed by the last fill or range clear
+let sheetPainted = [];
+
+function sheetCR(id) { return [SHEET_COLS.indexOf(id[0]), parseInt(id.slice(1), 10)]; }
+function sheetRect() {
+  const [c1, r1] = sheetCR(sheetSel), [c2, r2] = sheetCR(sheetEnd);
+  return { c1: Math.min(c1, c2), c2: Math.max(c1, c2), r1: Math.min(r1, r2), r2: Math.max(r1, r2) };
+}
+function sheetPaintSel() {
+  for (const id of sheetPainted) { const i = sheetCellInput(id); if (i) i.classList.remove("sel"); }
+  sheetPainted = [];
+  const ref = document.getElementById("sheetRef");
+  if (sheetEnd === sheetSel) { ref.textContent = sheetSel; return; }
+  const R = sheetRect();
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) {
+    const id = SHEET_COLS[c] + r;
+    sheetCellInput(id).classList.add("sel");
+    sheetPainted.push(id);
+  }
+  ref.textContent = SHEET_COLS[R.c1] + R.r1 + ":" + SHEET_COLS[R.c2] + R.r2;
+}
+// a cell is being edited once its text differs from what is stored, or after F2 / double-click
+function sheetEditing(inp) { return inp.value !== (sheet[inp.dataset.id] || "") || inp.dataset.edit === "1"; }
+// Move a formula by (dc, dr): every reference shifts unless "$" locks it; text inside quotes is left alone.
+function sheetShift(raw, dc, dr) {
+  if (!raw || raw[0] !== "=") return raw;
+  return "=" + raw.slice(1).split(/("(?:[^"]|"")*")/).map((part, i) => i % 2 ? part :
+    part.replace(/(^|[^A-Za-z0-9_.$])(\$?)([A-Za-z])(\$?)(\d{1,2})(?![A-Za-z0-9_.(])/g, (m, pre, ca, col, ra, row) => {
+      let c = SHEET_COLS.indexOf(col.toUpperCase()), r = parseInt(row, 10);
+      if (!ca) c += dc;
+      if (!ra) r += dr;
+      if (c < 0 || c >= SHEET_COLS.length || r < 1 || r > SHEET_ROWS) return pre + "#REF!";
+      return pre + ca + SHEET_COLS[c] + ra + r;
+    })).join("");
+}
+// after a fill, undo or clear, the active cell is ready for typing again: the next key replaces it
+function sheetReady() {
+  const a = document.activeElement;
+  if (a && a.dataset && a.dataset.id) { a.value = sheet[a.dataset.id] || ""; a.dataset.edit = ""; a.select(); }
+  sheetShowBar();
+  sheetPaintSel();
+}
+function sheetApply(changes) {
+  const ids = Object.keys(changes);
+  if (!ids.length) return;
+  const before = {};
+  for (const id of ids) before[id] = sheet[id];
+  for (const id of ids) { if (changes[id] === undefined) delete sheet[id]; else sheet[id] = changes[id]; }
+  sheetUndo = before;
+  sheetRender();
+  sheetSave();
+  sheetReady();
+}
+// commit whatever is being typed (in the active cell or the formula bar) before acting on the sheet
+function sheetCommitPending() {
+  const a = document.activeElement, fx = document.getElementById("sheetFx");
+  if (a === fx) { if (fx.value.trim() !== (sheet[sheetSel] || "")) sheetCommit(sheetSel, fx.value); }
+  else if (a && a.dataset && a.dataset.id && a.value !== (sheet[a.dataset.id] || "")) sheetCommit(a.dataset.id, a.value);
+}
+function sheetFill(dir) {
+  sheetCommitPending();
+  const R = sheetRect(), changes = {};
+  if (dir === "down" || dir === "up") {
+    const src = R.r1 === R.r2 ? (dir === "down" ? R.r1 - 1 : R.r1 + 1) : (dir === "down" ? R.r1 : R.r2);
+    if (src < 1 || src > SHEET_ROWS) return;
+    for (let c = R.c1; c <= R.c2; c++) {
+      const raw = sheet[SHEET_COLS[c] + src];
+      for (let r = R.r1; r <= R.r2; r++) if (r !== src) changes[SHEET_COLS[c] + r] = raw === undefined ? undefined : sheetShift(raw, 0, r - src);
+    }
+  } else {
+    const src = R.c1 === R.c2 ? (dir === "right" ? R.c1 - 1 : R.c1 + 1) : (dir === "right" ? R.c1 : R.c2);
+    if (src < 0 || src >= SHEET_COLS.length) return;
+    for (let r = R.r1; r <= R.r2; r++) {
+      const raw = sheet[SHEET_COLS[src] + r];
+      for (let c = R.c1; c <= R.c2; c++) if (c !== src) changes[SHEET_COLS[c] + r] = raw === undefined ? undefined : sheetShift(raw, c - src, 0);
+    }
+  }
+  sheetApply(changes);
+}
+// Ctrl+Enter: the active cell's entry goes into every selected cell, adjusted like a fill
+function sheetFillSelection() {
+  sheetCommitPending();
+  const raw = sheet[sheetSel], R = sheetRect(), [ac, ar] = sheetCR(sheetSel), changes = {};
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) {
+    const id = SHEET_COLS[c] + r;
+    if (id !== sheetSel) changes[id] = raw === undefined ? undefined : sheetShift(raw, c - ac, r - ar);
+  }
+  sheetApply(changes);
+}
+function sheetClearRange() {
+  const R = sheetRect(), changes = {};
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) changes[SHEET_COLS[c] + r] = undefined;
+  sheetApply(changes);
+}
+function sheetUndoLast() {
+  if (!sheetUndo) return;
+  const before = sheetUndo;
+  sheetUndo = null;
+  for (const id of Object.keys(before)) { if (before[id] === undefined) delete sheet[id]; else sheet[id] = before[id]; }
+  sheetRender();
+  sheetSave();
+  sheetReady();
+}
+// point mode: is the caret in a formula right after an operator, "(" or ","?
+function sheetPointable(el) {
+  const v = el.value, s = el.selectionStart;
+  return v[0] === "=" && s !== null && /[=+\-*/^(,:<>&]\s*$/.test(v.slice(0, s));
+}
+function sheetPointTo(id) {
+  const P = sheetPoint, el = P.el;
+  let ref = id;
+  if (id !== P.anchor) {
+    const [c1, r1] = sheetCR(P.anchor), [c2, r2] = sheetCR(id);
+    ref = SHEET_COLS[Math.min(c1, c2)] + Math.min(r1, r2) + ":" + SHEET_COLS[Math.max(c1, c2)] + Math.max(r1, r2);
+  }
+  el.value = el.value.slice(0, P.start) + ref + el.value.slice(P.start + P.len);
+  P.len = ref.length;
+  el.setSelectionRange(P.start + P.len, P.start + P.len);
+  if (el.id === "sheetFx") { const c = sheetCellInput(sheetSel); if (c) c.value = el.value; }
+  else document.getElementById("sheetFx").value = el.value;
+  sheetTip(el);
+}
+// Keys handled inside a cell; returns true when the key was used here.
+function sheetKey(e, inp) {
+  const k = (e.key || "").toLowerCase(), editing = sheetEditing(inp);
+  const ctrlOnly = e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey;
+  if (ctrlOnly && (k === "d" || k === "r")) { e.preventDefault(); sheetFill(k === "d" ? "down" : "right"); return true; }
+  if (ctrlOnly && k === "z" && !editing) { e.preventDefault(); sheetUndoLast(); return true; }   // never the browser's own undo
+  if (ctrlOnly && k === "enter") { e.preventDefault(); sheetFillSelection(); inp.select(); return true; }
+  if (k === "f2" && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+    e.preventDefault(); inp.dataset.edit = "1"; const n = inp.value.length; inp.setSelectionRange(n, n); return true;
+  }
+  if (e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    const d = { arrowdown: [0, 1], arrowup: [0, -1], arrowright: [1, 0], arrowleft: [-1, 0] }[k];
+    if (d && (d[0] === 0 || !editing)) {
+      e.preventDefault();
+      const [c, r] = sheetCR(sheetEnd);
+      sheetEnd = SHEET_COLS[Math.min(Math.max(c + d[0], 0), SHEET_COLS.length - 1)] + Math.min(Math.max(r + d[1], 1), SHEET_ROWS);
+      sheetPaintSel();
+      return true;
+    }
+  }
+  if (k === "delete" && !editing && sheetEnd !== sheetSel) { e.preventDefault(); sheetClearRange(); return true; }
+  return false;
+}
+// argument tips, as Excel shows them: =PV( shows PV(rate, nper, pmt, [fv], [type]) with the current argument in bold
+const SHEET_SIG = {
+  SUM: ["number1", "[number2]", "..."], AVERAGE: ["number1", "[number2]", "..."],
+  MIN: ["number1", "[number2]", "..."], MAX: ["number1", "[number2]", "..."],
+  SUMPRODUCT: ["array1", "[array2]", "..."], ROUND: ["number", "num_digits"], ROUNDUP: ["number", "num_digits"],
+  INT: ["number"], ABS: ["number"], EXP: ["number"], IF: ["logical_test", "[value_if_true]", "[value_if_false]"],
+  PMT: ["rate", "nper", "pv", "[fv]", "[type]"], RATE: ["nper", "pmt", "pv", "[fv]", "[type]", "[guess]"],
+  NPER: ["rate", "pmt", "pv", "[fv]", "[type]"], PV: ["rate", "nper", "pmt", "[fv]", "[type]"],
+  FV: ["rate", "nper", "pmt", "[pv]", "[type]"],
+};
+function sheetTip(el) {
+  const tip = document.getElementById("sheetTip");
+  tip.textContent = "";
+  tip.classList.remove("show");
+  if (!el || el.value[0] !== "=" || el.selectionStart === null) return;
+  const s = el.value.slice(1, el.selectionStart).replace(/"(?:[^"]|"")*"?/g, '""');
+  const stack = [];
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === "(") { const m = /([A-Za-z][A-Za-z0-9.]*)$/.exec(s.slice(0, i)); stack.push({ name: m ? m[1].toUpperCase() : null, arg: 0 }); }
+    else if (ch === ")") stack.pop();
+    else if (ch === "," && stack.length) stack[stack.length - 1].arg++;
+  }
+  for (let j = stack.length - 1; j >= 0; j--) {
+    const f = stack[j];
+    if (f.name && SHEET_SIG[f.name]) { sheetTipShow([[f.name, f.arg]]); return; }
+    if (f.name) return;
+  }
+  const m = /(^|[^A-Za-z0-9.$])([A-Za-z]+)$/.exec(s);          // a function name being typed
+  if (m) {
+    const pre = m[2].toUpperCase(), names = Object.keys(SHEET_SIG).filter(n => n.startsWith(pre));
+    if (names.length) sheetTipShow(names.map(n => [n, -1]));
+  }
+}
+function sheetTipShow(items) {
+  const tip = document.getElementById("sheetTip");
+  items.forEach(([name, arg], k) => {
+    if (k) tip.appendChild(document.createTextNode("    "));
+    const sig = SHEET_SIG[name];
+    let hi = arg;
+    if (hi >= 0 && (hi >= sig.length || sig[hi] === "...")) hi = sig.indexOf("...") > 0 ? sig.indexOf("...") - 1 : sig.length - 1;
+    tip.appendChild(document.createTextNode(name + "("));
+    sig.forEach((a, i) => {
+      if (i) tip.appendChild(document.createTextNode(", "));
+      if (i === hi) { const b = document.createElement("b"); b.textContent = a; tip.appendChild(b); }
+      else tip.appendChild(document.createTextNode(a));
+    });
+    tip.appendChild(document.createTextNode(")"));
+    if (hi >= 0 && sig[hi] === "[type]") tip.appendChild(document.createTextNode("   type: 0 = end of period, 1 = beginning"));
+  });
+  tip.classList.add("show");
+}
+function sheetCommit(id, raw) {
+  raw = (raw || "").trim();
+  if (raw !== (sheet[id] || "")) sheetUndo = null;      // a typed change ends the chance to undo the last fill
+  if (raw) sheet[id] = raw; else delete sheet[id];
+  sheetRender();
+  sheetSave();
+}
+let sheetClearArmed = 0;
+function sheetClear() {
+  const now = Date.now();
+  const hint = document.getElementById("sheetHint");
+  if (now - sheetClearArmed > 4000) {
+    sheetClearArmed = now;
+    hint.textContent = "Click \"Clear all\" again within 4 seconds to erase the whole sheet.";
+    setTimeout(() => { hint.innerHTML = SHEET_HINT; }, 4000);
+    return;
+  }
+  sheetClearArmed = 0;
+  sheet = {}; sheetUndo = null; sheetRender(); sheetSave(); sheetShowBar(); sheetPaintSel();
+  hint.innerHTML = SHEET_HINT;
+}
+
+// ---- formula engine: a small Excel-style parser and evaluator (no eval, no Function)
+// Precedence follows Excel: negation > % > ^ (left to right) > * / > + - > & > comparisons.
+// A blank cell is null: 0 in arithmetic, "" in text, and skipped by SUM/AVERAGE/MIN/MAX.
+function sheetParseNumber(s) {
+  let t = s.replace(/[$,\s]/g, "");
+  let neg = false, pct = false;
+  if (/^\(.*\)$/.test(t)) { neg = true; t = t.slice(1, -1); }
+  if (t.endsWith("%")) { pct = true; t = t.slice(0, -1); }
+  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)) return null;
+  let n = parseFloat(t);
+  if (pct) n /= 100;
+  return neg ? -n : n;
+}
+let sheetMemo = null;   // per-render cache, so a long column of formulas is evaluated once
+function sheetValue(id, seen) {
+  const raw = sheet[id];
+  if (raw === undefined || raw === "") return null;
+  if (raw[0] !== "=") {
+    const u = raw.trim().toUpperCase();
+    if (u === "TRUE" || u === "FALSE") return u === "TRUE";
+    const n = sheetParseNumber(raw);
+    return n === null ? raw : n;
+  }
+  if (sheetMemo && sheetMemo.has(id)) { const m = sheetMemo.get(id); if (m.err) throw m.err; return m.v; }
+  if (seen.has(id)) throw new Error("#CYCLE");
+  seen.add(id);
+  let v, err = null;
+  try { v = sheetEval(raw.slice(1), seen); } catch (e) { err = e; }
+  seen.delete(id);
+  if (sheetMemo && !(err && err.message === "#CYCLE")) sheetMemo.set(id, err ? { err } : { v });
+  if (err) throw err;
+  return v;
+}
+function sheetErr(code) { return new Error(code); }
+function sheetRefId(s) {
+  const m = /^\$?([A-Z]{1,3})\$?(\d+)$/.exec(s);
+  if (!m) return null;
+  const c = SHEET_COLS.indexOf(m[1]), r = parseInt(m[2], 10);
+  return (c < 0 || r < 1 || r > SHEET_ROWS) ? "#REF" : SHEET_COLS[c] + r;
+}
+function sheetTokens(src) {
+  const toks = [];
+  let i = 0;
+  while (i < src.length) {
+    const ch = src[i], rest = src.slice(i);
+    if (ch === " " || ch === "\t" || ch === "\n" || ch === "\r") { i++; continue; }
+    if (ch === '"') {
+      let j = i + 1, s = "";
+      for (;;) {
+        if (j >= src.length) throw sheetErr("#ERROR");
+        if (src[j] === '"') { if (src[j + 1] === '"') { s += '"'; j += 2; continue; } break; }
+        s += src[j++];
+      }
+      toks.push({ t: "str", v: s }); i = j + 1; continue;
+    }
+    let m = /^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/i.exec(rest);
+    if (m) { toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue; }
+    m = /^#REF!?/i.exec(rest);
+    if (m) { toks.push({ t: "err", v: "#REF" }); i += m[0].length; continue; }
+    m = /^[$A-Za-z][$A-Za-z0-9.]*/.exec(rest);
+    if (m) { toks.push({ t: "id", v: m[0].toUpperCase() }); i += m[0].length; continue; }
+    const two = src.substr(i, 2);
+    if (two === "<=" || two === ">=" || two === "<>") { toks.push({ t: "op", v: two }); i += 2; continue; }
+    if ("+-*/^%&=<>(),:".indexOf(ch) >= 0) { toks.push({ t: "op", v: ch }); i++; continue; }
+    throw sheetErr("#NAME");
+  }
+  return toks;
+}
+function sheetParse(src) {
+  const toks = sheetTokens(src.replace(/−/g, "-"));
+  let p = 0;
+  const isOp = (v) => p < toks.length && toks[p].t === "op" && toks[p].v === v;
+  const fail = () => { throw sheetErr("#ERROR"); };
+  const CMP = ["=", "<>", "<", ">", "<=", ">="];
+  function cmp() { let l = cat(); while (p < toks.length && toks[p].t === "op" && CMP.indexOf(toks[p].v) >= 0) { const op = toks[p++].v; l = { k: "bin", op, l, r: cat() }; } return l; }
+  function cat() { let l = add(); while (isOp("&")) { p++; l = { k: "bin", op: "&", l, r: add() }; } return l; }
+  function add() { let l = mul(); while (isOp("+") || isOp("-")) { const op = toks[p++].v; l = { k: "bin", op, l, r: mul() }; } return l; }
+  function mul() { let l = pow(); while (isOp("*") || isOp("/")) { const op = toks[p++].v; l = { k: "bin", op, l, r: pow() }; } return l; }
+  function pow() { let l = una(); while (isOp("^")) { p++; l = { k: "bin", op: "^", l, r: una() }; } return l; }
+  function una() { if (isOp("-") || isOp("+")) { const op = toks[p++].v; return { k: "un", op, x: una() }; } return pct(); }
+  function pct() { let x = prim(); while (isOp("%")) { p++; x = { k: "pct", x }; } return x; }
+  function prim() {
+    const tk = toks[p++];
+    if (!tk) fail();
+    if (tk.t === "num" || tk.t === "str") return { k: "lit", v: tk.v };
+    if (tk.t === "err") { if (isOp(":")) p += 2; return { k: "err", v: tk.v }; }   // #REF! as either end of a range
+    if (tk.t === "op" && tk.v === "(") { const x = cmp(); if (!isOp(")")) fail(); p++; return x; }
+    if (tk.t !== "id") fail();
+    if (isOp("(")) {
+      p++;
+      const args = [];   // an empty argument, as in PMT(r,n,pv,,1), takes the function's default
+      if (!isOp(")")) for (;;) { args.push(isOp(",") || isOp(")") ? { k: "missing" } : cmp()); if (isOp(",")) { p++; continue; } break; }
+      if (!isOp(")")) fail();
+      p++;
+      if (!Object.prototype.hasOwnProperty.call(SHEET_FN, tk.v)) throw sheetErr("#NAME");
+      return { k: "fn", name: tk.v, args };
+    }
+    if (tk.v === "TRUE" || tk.v === "FALSE") return { k: "lit", v: tk.v === "TRUE" };
+    const a = sheetRefId(tk.v);
+    if (!a) throw sheetErr("#NAME");
+    if (isOp(":")) {
+      p++;
+      const t2 = toks[p++];
+      if (t2 && t2.t === "err") return { k: "err", v: "#REF" };
+      const b = t2 && t2.t === "id" ? sheetRefId(t2.v) : null;
+      if (!b) fail();
+      if (a === "#REF" || b === "#REF") return { k: "err", v: "#REF" };
+      return { k: "range", a, b };
+    }
+    return a === "#REF" ? { k: "err", v: "#REF" } : { k: "ref", id: a };
+  }
+  const ast = cmp();
+  if (p !== toks.length) fail();
+  return ast;
+}
+function sheetFinite(x) { if (!isFinite(x)) throw sheetErr("#NUM"); return x; }
+function sheetScalar(v) { if (Array.isArray(v)) throw sheetErr("#VALUE"); return v; }
+function sheetToNum(v) {
+  v = sheetScalar(v);
+  if (v === null || v === undefined) return 0;
+  if (typeof v === "number") return v;
+  if (typeof v === "boolean") return v ? 1 : 0;
+  const n = sheetParseNumber(String(v));
+  if (n === null) throw sheetErr("#VALUE");
+  return n;
+}
+function sheetToText(v) {
+  v = sheetScalar(v);
+  if (v === null || v === undefined) return "";
+  if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+  if (typeof v === "number") return String(Number(v.toPrecision(15)));
+  return v;
+}
+function sheetCompare(a, b, op) {
+  a = sheetScalar(a); b = sheetScalar(b);
+  const blankAs = (other) => typeof other === "string" ? "" : typeof other === "boolean" ? false : 0;
+  if (a === null || a === undefined) a = blankAs(b === null || b === undefined ? 0 : b);
+  if (b === null || b === undefined) b = blankAs(a);
+  const rank = (v) => typeof v === "number" ? 0 : typeof v === "string" ? 1 : 2;
+  let c;
+  if (rank(a) !== rank(b)) c = rank(a) - rank(b);
+  else if (typeof a === "string") { const x = a.toUpperCase(), y = b.toUpperCase(); c = x < y ? -1 : x > y ? 1 : 0; }
+  else { const x = Number(Number(a).toPrecision(15)), y = Number(Number(b).toPrecision(15)); c = x < y ? -1 : x > y ? 1 : 0; }
+  return op === "=" ? c === 0 : op === "<>" ? c !== 0 : op === "<" ? c < 0 : op === ">" ? c > 0 : op === "<=" ? c <= 0 : c >= 0;
+}
+function sheetShaped(arr, rows, cols) { arr.rows = rows; arr.cols = cols; return arr; }
+function sheetRangeValues(a, b, seen) {
+  const c1 = SHEET_COLS.indexOf(a[0]), r1 = parseInt(a.slice(1), 10), c2 = SHEET_COLS.indexOf(b[0]), r2 = parseInt(b.slice(1), 10);
+  const out = [];
+  for (let r = Math.min(r1, r2); r <= Math.max(r1, r2); r++)
+    for (let c = Math.min(c1, c2); c <= Math.max(c1, c2); c++) out.push(sheetValue(SHEET_COLS[c] + r, seen));
+  return sheetShaped(out, Math.abs(r2 - r1) + 1, Math.abs(c2 - c1) + 1);
+}
+// Excel array arithmetic: an operator applied to a range works cell by cell (e.g. SUMPRODUCT(A1:A3*B1:B3))
+function sheetMap(a, b, f) {
+  const A = Array.isArray(a), B = Array.isArray(b);
+  if (!A && !B) return f(a, b);
+  const s = A ? a : b;
+  if (A && B && (a.rows !== b.rows || a.cols !== b.cols)) throw sheetErr("#VALUE");
+  const out = [];
+  for (let i = 0; i < s.length; i++) out.push(f(A ? a[i] : a, B ? b[i] : b));
+  return sheetShaped(out, s.rows, s.cols);
+}
+function sheetBin(op, a, b) {
+  switch (op) {
+    case "+": return sheetFinite(sheetToNum(a) + sheetToNum(b));
+    case "-": return sheetFinite(sheetToNum(a) - sheetToNum(b));
+    case "*": return sheetFinite(sheetToNum(a) * sheetToNum(b));
+    case "/": { const x = sheetToNum(a), d = sheetToNum(b); if (d === 0) throw sheetErr("#DIV/0"); return sheetFinite(x / d); }
+    case "^": { const x = sheetToNum(a), y = sheetToNum(b); if (x === 0 && y <= 0) throw sheetErr(y === 0 ? "#NUM" : "#DIV/0"); return sheetFinite(Math.pow(x, y)); }
+    case "&": return sheetToText(a) + sheetToText(b);
+    default: return sheetCompare(a, b, op);
+  }
+}
+function sheetEvalNode(n, seen) {
+  switch (n.k) {
+    case "lit": return n.v;
+    case "missing": return undefined;
+    case "err": throw sheetErr(n.v);
+    case "ref": return sheetValue(n.id, seen);
+    case "range": return sheetRangeValues(n.a, n.b, seen);
+    case "un": return sheetMap(sheetEvalNode(n.x, seen), null, (x) => n.op === "-" ? sheetFinite(-sheetToNum(x)) : x);
+    case "pct": return sheetMap(sheetEvalNode(n.x, seen), null, (x) => sheetToNum(x) / 100);
+    case "fn": return sheetCall(n, seen);
+    case "bin": return sheetMap(sheetEvalNode(n.l, seen), sheetEvalNode(n.r, seen), (a, b) => sheetBin(n.op, a, b));
+  }
+  throw sheetErr("#ERROR");
+}
+const SHEET_AGG = { SUM: 1, AVERAGE: 1, MIN: 1, MAX: 1, SUMPRODUCT: 1 };
+function sheetCall(n, seen) {
+  if (n.name === "IF") {   // only the chosen branch is evaluated, as in Excel
+    if (n.args.length < 2 || n.args.length > 3) throw sheetErr("#ERROR");
+    let c = sheetScalar(sheetEvalNode(n.args[0], seen));
+    if (typeof c === "string") { const u = c.toUpperCase(); if (u !== "TRUE" && u !== "FALSE") throw sheetErr("#VALUE"); c = u === "TRUE"; }
+    if (typeof c === "number" ? c !== 0 : c) return sheetEvalNode(n.args[1], seen);
+    return n.args.length === 3 ? sheetEvalNode(n.args[2], seen) : false;
+  }
+  // in SUM, AVERAGE, MIN, MAX and SUMPRODUCT a cell reference behaves like a one-cell range (blanks, text, TRUE skipped)
+  const args = n.args.map((a) => {
+    const v = sheetEvalNode(a, seen);
+    return SHEET_AGG[n.name] && a.k === "ref" ? sheetShaped([v], 1, 1) : v;
+  });
+  const v = SHEET_FN[n.name](args);
+  return typeof v === "number" ? sheetFinite(v) : v;
+}
+// numbers from arguments: inside ranges, text, TRUE/FALSE and blanks are skipped (as in Excel)
+function sheetNums(args) {
+  const out = [];
+  for (const x of args) {
+    if (Array.isArray(x)) { for (const y of x) if (typeof y === "number") out.push(y); }
+    else out.push(sheetToNum(x));
+  }
+  return out;
+}
+function sheetArg(a, i) { if (i >= a.length) throw sheetErr("#ERROR"); return sheetToNum(a[i]); }
+function sheetOpt(a, i, d) { return a[i] === undefined ? d : sheetToNum(a[i]); }
+function sheetRound(x, d, up) {
+  d = Math.trunc(d);
+  const f = Math.pow(10, d), s = x < 0 ? -1 : 1;
+  const y = Number((Math.abs(x) * f).toPrecision(15));
+  return s * (up ? Math.ceil(y) : Math.round(y)) / f;
+}
+// RATE: Newton's method from the guess, then a bracketed bisection if Newton does not settle
+function sheetSolve(f, guess, scale) {
+  let x = guess;
+  for (let i = 0; i < 100 && isFinite(x) && x > -1; i++) {
+    const y = f(x), h = 1e-6 * Math.max(1e-4, Math.abs(x)), d = (f(x + h) - f(x - h)) / (2 * h);
+    if (!isFinite(y) || !isFinite(d) || d === 0) break;
+    const nx = x - y / d;
+    if (Math.abs(nx - x) < 1e-13 * Math.max(1, Math.abs(x)) && Math.abs(f(nx)) <= 1e-7 * scale) return nx;
+    x = nx;
+  }
+  const grid = [-0.99, -0.9, -0.5, -0.2, -0.1, -0.05, -0.01, 0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10];
+  for (let k = 0; k + 1 < grid.length; k++) {
+    let lo = grid[k], hi = grid[k + 1], flo = f(lo);
+    const fhi = f(hi);
+    if (!isFinite(flo) || !isFinite(fhi) || flo * fhi > 0) continue;
+    for (let i = 0; i < 200; i++) {
+      const mid = (lo + hi) / 2, fm = f(mid);
+      if (fm === 0 || hi - lo < 1e-15) return mid;
+      if (flo * fm < 0) { hi = mid; } else { lo = mid; flo = fm; }
+    }
+    return (lo + hi) / 2;
+  }
+  throw sheetErr("#NUM");
+}
+const SHEET_FN = {
+  SUM: (a) => sheetNums(a).reduce((s, x) => s + x, 0),
+  AVERAGE: (a) => { const v = sheetNums(a); if (!v.length) throw sheetErr("#DIV/0"); return v.reduce((s, x) => s + x, 0) / v.length; },
+  MIN: (a) => { const v = sheetNums(a); return v.length ? Math.min(...v) : 0; },
+  MAX: (a) => { const v = sheetNums(a); return v.length ? Math.max(...v) : 0; },
+  ROUND: (a) => sheetRound(sheetArg(a, 0), sheetOpt(a, 1, 0), false),
+  ROUNDUP: (a) => sheetRound(sheetArg(a, 0), sheetOpt(a, 1, 0), true),
+  INT: (a) => Math.floor(sheetArg(a, 0)),
+  ABS: (a) => Math.abs(sheetArg(a, 0)),
+  EXP: (a) => Math.exp(sheetArg(a, 0)),
+  IF: null,   // evaluated lazily in sheetCall
+  SUMPRODUCT: (a) => {
+    if (!a.length) throw sheetErr("#ERROR");
+    const arrs = a.map(x => Array.isArray(x) ? x : sheetShaped([sheetToNum(x)], 1, 1));
+    const s0 = arrs[0];
+    if (arrs.some(x => x.rows !== s0.rows || x.cols !== s0.cols)) throw sheetErr("#VALUE");
+    let s = 0;
+    for (let i = 0; i < s0.length; i++) { let p = 1; for (const x of arrs) p *= typeof x[i] === "number" ? x[i] : 0; s += p; }
+    return s;
+  },
+  PMT: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (n === 0) throw sheetErr("#NUM");
+    if (r === 0) return -(pv + fv) / n;
+    const g = Math.pow(1 + r, n);
+    return -(r * (fv + pv * g)) / ((1 + r * t) * (g - 1));
+  },
+  FV: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pmt = sheetArg(a, 2), pv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) return -(pv + pmt * n);
+    const g = Math.pow(1 + r, n);
+    return -(pv * g + pmt * (1 + r * t) * (g - 1) / r);
+  },
+  PV: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pmt = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) return -(fv + pmt * n);
+    const g = Math.pow(1 + r, n);
+    return -(fv + pmt * (1 + r * t) * (g - 1) / r) / g;
+  },
+  NPER: (a) => {
+    const r = sheetArg(a, 0), pmt = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) { if (pmt === 0) throw sheetErr("#NUM"); return -(pv + fv) / pmt; }
+    const k = pmt * (1 + r * t), q = (k - fv * r) / (k + pv * r);
+    if (!(q > 0) || r <= -1) throw sheetErr("#NUM");
+    return Math.log(q) / Math.log(1 + r);
+  },
+  RATE: (a) => {
+    const n = sheetArg(a, 0), pmt = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0, guess = sheetOpt(a, 5, 0.1);
+    if (n <= 0) throw sheetErr("#NUM");
+    const f = (x) => { if (Math.abs(x) < 1e-10) return pv + pmt * n + fv; const g = Math.pow(1 + x, n); return pv * g + pmt * (1 + x * t) * (g - 1) / x + fv; };
+    return sheetSolve(f, guess, Math.max(1, Math.abs(pv) + Math.abs(pmt) * n + Math.abs(fv)));
+  },
+};
+function sheetEval(expr, seen) {
+  const v = sheetEvalNode(sheetParse(expr), seen);
+  if (Array.isArray(v)) throw sheetErr("#VALUE");
+  if (v === null || v === undefined) return 0;     // =A1 with A1 blank shows 0, as in Excel
+  if (typeof v === "number") return sheetFinite(v);
+  return v;
+}
+function sheetFormat(v) {
+  if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+  if (typeof v !== "number") return String(v);
+  let x = Number(v.toPrecision(10));               // up to 10 significant digits, like Excel's General format
+  if (Math.abs(x) < 5e-11) x = 0;
+  for (let d = 10; d >= 0; d--) {                  // only as many decimals as fit the cell, so no digit is cut off
+    const s = x.toLocaleString(undefined, { maximumFractionDigits: d });
+    if (s.length <= 11) return s;
+  }
+  return x.toExponential(4);
+}
+function sheetRender() {
+  sheetMemo = new Map();
+  try {
+    for (const c of SHEET_COLS) for (let r = 1; r <= SHEET_ROWS; r++) {
+      const id = c + r, inp = sheetCellInput(id);
+      if (!inp || document.activeElement === inp) continue;
+      inp.classList.remove("err");
+      if (sheet[id] === undefined) { inp.value = ""; continue; }
+      try { inp.value = sheetFormat(sheetValue(id, new Set())); }
+      catch (err) { inp.value = String(err.message).startsWith("#") ? err.message : "#ERROR"; inp.classList.add("err"); }
+    }
+  } finally { sheetMemo = null; }
+}
+function sheetSave() {
+  if (!currentState) return;
+  currentState.sheet = sheet;
+  saveState(currentKey, currentState);
+}
+function sheetLoad() {
+  sheet = (currentState && currentState.sheet) || {};
+  sheetRender();
+}
+(function initSheet() {
+  sheetBuild();
+  SHEET_HINT = document.getElementById("sheetHint").innerHTML;
+  const panel = document.getElementById("sheetPanel"), header = document.getElementById("sheetHeader");
+  let dragging = false, ox = 0, oy = 0;
+  header.addEventListener("mousedown", (e) => {
+    if (e.target.tagName === "BUTTON") return;
+    dragging = true; const r = panel.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top;
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (!dragging) return; panel.style.left = (e.clientX - ox) + "px"; panel.style.top = (e.clientY - oy) + "px";
+  });
+  document.addEventListener("mouseup", () => { dragging = false; });
+})();
+
+
+initApplication();</script></body></html>
