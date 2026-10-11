@@ -360,6 +360,7 @@
   p, li {line-height:1.55;} li {margin-bottom:7px;}
   button, input, select, textarea {font:inherit;}
   button {cursor:pointer; min-height:36px;}
+  button:disabled {opacity:.6;cursor:default;}
   input[type=password], input[type=number], select {padding:9px; border:1px solid #667085; border-radius:4px;}
   input[type=checkbox] {width:20px; height:20px; flex-shrink:0;}
   .check-row {display:flex; align-items:flex-start; gap:10px; margin:18px 0;}
@@ -471,7 +472,7 @@ function showFinished() {
     $('objectiveNotice').textContent=`Home practice score: ${score} / ${total} (${Math.round(100*score/total)}%). This is practice, not a course grade.`;
     $('selfGrade').hidden=false;$('selfGrade').innerHTML='<h2>Worked feedback</h2>'+feedback;
   }
-  $('finished').focus();
+  $('finished').focus();$('finished').scrollIntoView({block:'start'});
 }
 async function finalize(reason) {
   if(!activeExam()) return;
@@ -563,6 +564,10 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('beforeinput',e=>{if(activeExam()&&currentState.deadline&&Date.now()>=currentState.deadline){e.preventDefault();finalize('time expired');}},true);
 function initApplication() {
   $('calcToggle').classList.add('visible');$('sheetToggle').classList.add('visible');
+  if(SETTINGS.practice && !SETTINGS.selfGrading && !/SEB\//i.test(navigator.userAgent)){
+    const install=document.createElement('p');install.className='notice';install.innerHTML='Before class: install the institution-supported <a href="https://safeexambrowser.org/download_en.html" rel="noreferrer">Safe Exam Browser application</a>. It is an installed app, not a browser extension. Then download <a href="FIN4311_MT1_Practice.seb">Practice.seb</a> and open that file with SEB. No actual exam code is needed.';
+    $('landing').insertBefore(install,$('landing').children[1]);
+  }
   // Formula cells and scratch work save on input, including an unfinished active edit.
   $('sheetGrid').addEventListener('input',e=>{if(!activeExam() || !e.target.dataset.id)return; sheet[e.target.dataset.id]=e.target.value; currentState.sheet={...sheet};saveState(currentKey,currentState);});
   $('sheetFx').addEventListener('input',()=>{if(activeExam()){sheet[sheetSel]=$('sheetFx').value;currentState.sheet={...sheet};saveState(currentKey,currentState);}});
