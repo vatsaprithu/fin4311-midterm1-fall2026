@@ -307,11 +307,11 @@
     <h1>FIN 4311 — Bank Management</h1>
     <p>Classroom SEB rehearsal · 4 questions · Ungraded · No time limit</p>
   </header>
-  <section id="landing" class="card"><h2>Classroom SEB rehearsal</h2><p>This is an in-class device rehearsal for Tuesday October 13. It has four short examples to practice the software workflow. Open Practice.seb in Safe Exam Browser. No real exam access code is needed. These questions do not reproduce the graded exam.</p><p>Enter your name and UTEP email. Work and progress stay in this browser; nothing is uploaded automatically. Use the built-in tools, enter answers, reload and resume, finalize, and download a practice file. A practice download is not a graded submission.</p>
+  <section id="landing" class="card"><h2>Classroom SEB rehearsal</h2><p>This in-class practice for Tuesday October 13 has four worked questions using main-exam question types with different inputs or compounding frequency. Open Practice.seb in SEB. After finalization it shows worked solutions; the answer-check score is ungraded. No start password is needed. The practice quit password is practice4311. It applies only to practice.</p><p>Enter your name and UTEP email. Work and progress stay in this browser; nothing is uploaded automatically. Use the built-in tools, enter answers, reload and resume, finalize, and download a practice file. A practice download is not a graded submission.</p>
 <div class="form-row"><label for="studentName">Full name</label><input id="studentName" type="text" autocomplete="off"></div>
 <div class="form-row"><label for="studentEmail">UTEP email</label><input id="studentEmail" type="email" autocomplete="off"></div>
 <input id="accessCode" type="password" hidden aria-label="Unused practice access code">
-<details id="proctorControls"><summary>Instructor browser preview</summary><p>Student classroom practice uses SEB. Instructor preview in a regular browser requires the proctor code.</p><label for="examMode">Session mode</label><select id="examMode"><option value="exam">Practice</option><option value="preview">Instructor preview</option></select><label for="proctorCode">Proctor code for instructor preview</label><input id="proctorCode" type="password" autocomplete="off"></details>
+<details id="proctorControls"><summary>Instructor browser preview</summary><p>Students use SEB. Staff preview in a regular browser requires the private proctor code.</p><label for="examMode">Session mode</label><select id="examMode"><option value="exam">Practice</option><option value="preview">Instructor preview</option></select><label for="proctorCode">Proctor code for instructor preview</label><input id="proctorCode" type="password" autocomplete="off"></details>
 <input id="approvedMinutes" type="number" value="80" hidden aria-label="Unused practice duration">
 <div class="check-row"><input id="agree" type="checkbox"><label for="agree">I understand this is ungraded practice with local saving.</label></div>
 <button id="beginBtn" type="button">Begin or resume practice</button><p id="landingError" role="alert" class="error"></p></section>
@@ -325,7 +325,7 @@
     </details>
     <p>Open the calculator and compute 120 / 4. Open the spreadsheet, enter 100 in A1, 20 in A2, and =SUM(A1:A2) in A3. Confirm that A3 displays 120. Use the keyboard and resize the panels as needed.</p>
     <button type="button" id="setupDownload">Download a practice file</button>
-    <p>Verify that a JSON file is saved to your device. Then ask the proctor to exit SEB using its Quit control (Ctrl+Q on Windows or Command+Q on Mac) and the private quit password. If any step fails, tell the proctor before exam day.</p>
+    <p>Request the JSON download, then exit the setup check using SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and practice4311. After exiting, confirm that the file is in Downloads. This password applies to setup and practice only. If any step fails, tell the proctor before exam day.</p>
     <p id="setupNote" role="status"></p>
   </section>
   <section id="exam" hidden aria-label="Exam questions">
@@ -345,11 +345,12 @@
     <p id="finishedReason"></p>
     <p id="objectiveNotice"></p>
     <div id="selfGrade" hidden></div>
-    <p><strong>Download the practice file if you want to rehearse saving it. This is not an actual exam submission.</strong> Do not close this page until your file has saved. All answers and spreadsheet work are included in that file. The instructor grades the written questions.</p>
+    <details id="submittedWork"><summary>Review your submitted answers and calculations</summary><div id="submittedWorkBody"></div></details>
+    <p><strong>Download the practice file if you want to rehearse saving it. This is not an actual exam submission.</strong> Do not close this page until your file has saved. All answers and spreadsheet work are included in that file. The practice answer check does not assess written method credit.</p>
     <button type="button" id="downloadBtn">Download final submission</button>
     <button type="button" id="restartPractice" hidden>Start a new practice session</button>
     <p id="downloadStatus" role="status"></p>
-    <p>When your file has saved, ask the proctor to use SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and enter the private quit password.</p>
+    <p>After your practice file has saved, use SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and enter practice4311. After exiting, find the file in Downloads. This password works only with the practice configurations.</p>
   </section>
   <p class="privacy-note">Local saving only. Clearing browser data, changing devices, or losing the SEB browser profile can remove saved work. Tell the proctor promptly if anything fails.</p>
 </main>
@@ -370,6 +371,10 @@
   label {font-weight:600;}
   textarea.answer {width:100%; min-height:76px; padding:10px; border:1px solid #667085; border-radius:4px; resize:vertical;}
   textarea.work {min-height:130px;}
+  input.numeric-answer {width:100%;max-width:420px;padding:10px;border:1px solid #667085;border-radius:4px;}
+  #selfGrade section {margin:22px 0;padding-top:8px;border-top:1px solid #667085;}
+  #submittedWorkBody pre {white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;background:#f3f5f8;padding:10px;}
+  .review-table-wrap {overflow-x:auto;}
   .field {margin:18px 0;}
   .card table {border-collapse:collapse; width:100%; margin:16px 0;}
   .card th,.card td {padding:9px; border:1px solid #667085; text-align:left;}
@@ -398,9 +403,9 @@
   @media(max-width:720px) {#timerBar {padding-right:8px; padding-bottom:50px;} body.quiz-active{padding-top:92px;} body.quiz-active #calcToggle,body.quiz-active #sheetToggle{top:44px;} .panel-reset {top:86px;} .wrap{padding-left:10px;padding-right:10px;} .card{padding:16px;} }
 </style>
 <script>
-const SETTINGS = {"examId": "FIN4311_CLASS_DEMO_V1", "schema": "FIN4311-written-v1", "start": "2026-10-15T10:30:00-06:00", "end": "2026-10-15T11:50:00-06:00", "questionDigest": "aeb221efbd17851d6882d013b251579499644b5fe05e52664963be2af085f291", "proctorSalt": "b2c1db9a4478c5adbf662ccfc051d1c6", "proctorHash": "8237d5f56c997879c4fb5e9b738915903958020004207a91b89baff316dfef8c", "practice": true, "selfGrading": false, "requireSEB": true};
+const SETTINGS = {"examId": "FIN4311_CLASS_DEMO_V2", "schema": "FIN4311-written-v1", "start": "2026-10-15T10:30:00-06:00", "end": "2026-10-15T11:50:00-06:00", "questionDigest": "815af3b43d796d3d4313fb3ebe88861019d3b0805ca04f221cbd1c0dac7c34fb", "proctorSalt": "b2c1db9a4478c5adbf662ccfc051d1c6", "proctorHash": "8237d5f56c997879c4fb5e9b738915903958020004207a91b89baff316dfef8c", "practice": true, "selfGrading": true, "classroomPractice": true, "requireSEB": true};
 const ENCRYPTED = null;
-const PRACTICE = {"examId": "FIN4311_CLASS_DEMO_V1", "questions": [{"id": "q1", "title": "Recover a Treasury bill discount quote", "points": 2, "prompt": "A 90-day Treasury bill with $500,000 face value is purchased for $493,750 and held to maturity. Use a 360-day year. Find the dollar discount and then recover the annual bank discount yield from the price. This is an ungraded practice calculation.", "fields": [{"id": "q1a", "label": "a. Dollar discount from face value", "points": 1, "kind": "text"}, {"id": "q1b", "label": "b. Annual bank discount yield", "points": 1, "kind": "text"}]}, {"id": "q2", "title": "A credit line draw", "points": 2, "prompt": "A business has a $4,000,000 credit line with $1,000,000 already drawn. It draws another $750,000 today. Assume no repayments or limit changes. This ungraded example checks how a commitment becomes a funded loan; no fee calculation is required.", "fields": [{"id": "q2a", "label": "a. Funded loan balance after the new draw", "points": 1, "kind": "text"}, {"id": "q2b", "label": "b. Remaining undrawn commitment", "points": 1, "kind": "text"}]}, {"id": "q3", "title": "Coupon payments on a bond", "points": 2, "prompt": "A bond has a face value of $1,500 and a 4.00% annual coupon rate. It pays equal coupons twice a year. Ignore changes in the bond price. This question is only a device rehearsal.", "fields": [{"id": "q3a", "label": "a. Total coupon dollars paid in one year", "points": 1, "kind": "text"}, {"id": "q3b", "label": "b. Dollars paid at each six-month coupon date", "points": 1, "kind": "text"}]}, {"id": "q4", "title": "A simple income calculation", "points": 2, "prompt": "For this ungraded tool check, a small bank branch has $250,000 of interest income, $140,000 of interest expense, $35,000 of fee income and $95,000 of operating expense in a year. Ignore taxes. Use the calculator or spreadsheet to find total income, total expense and the remaining profit.", "fields": [{"id": "q4a", "label": "a. Total income", "points": 0.5, "kind": "text"}, {"id": "q4b", "label": "b. Total expense", "points": 0.5, "kind": "text"}, {"id": "q4c", "label": "c. Profit before taxes", "points": 1, "kind": "text"}]}]};
+const PRACTICE = {"examId": "FIN4311_CLASS_DEMO_V2", "questions": [{"id": "q1", "title": "Quarterly compounding", "points": 2, "practiceType": "compounding", "prompt": "A customer deposits $180,000 for six months at an 8.00% nominal annual rate compounded quarterly. There are four periods per year and two periods in this investment. Keep full precision until the final answers. Enter percentage answers as percentage numbers, for example 2 for 2%. Show your calculations in the working box or spreadsheet.", "fields": [{"id": "q1a", "label": "a. Quarterly periodic rate (%)", "points": 0.5, "kind": "numeric", "expected": 2, "tolerance": 0.0051, "answerDisplay": "2.00%", "solution": "Quarterly rate = 8.00% / 4 = 2.00%, or 0.02 as a decimal."}, {"id": "q1b", "label": "b. Ending balance ($)", "points": 1, "kind": "numeric", "expected": 187272.0, "tolerance": 0.011, "answerDisplay": "$187,272.00", "solution": "FV = 180,000(1 + 0.08/4)^2 = $187,272.00. Spreadsheet: =180000*(1+0.08/4)^2."}, {"id": "q1c", "label": "c. Interest earned ($)", "points": 0.5, "kind": "numeric", "expected": 7272.0, "tolerance": 0.011, "answerDisplay": "$7,272.00", "solution": "Interest = FV - principal = 187,272.00 - 180,000 = $7,272.00."}]}, {"id": "q2", "title": "Treasury bill price and investment yield", "points": 2, "practiceType": "treasury-bill", "prompt": "A Treasury bill has $1,000,000 face value, 180 days to maturity and a 5.25% annual bank discount yield. Use face value and a 360-day basis for price. For this question, calculate the simple annualized investment yield using purchase price and a 360-day basis. The investor holds it to maturity.", "fields": [{"id": "q2a", "label": "a. Purchase price ($)", "points": 1, "kind": "numeric", "expected": 973750.0, "tolerance": 0.011, "answerDisplay": "$973,750.00", "solution": "Discount = 1,000,000 x 0.0525 x (180/360) = $26,250. Price = 1,000,000 - 26,250 = $973,750.00. Spreadsheet: =1000000*(1-0.0525*180/360)."}, {"id": "q2b", "label": "b. Simple annualized investment yield, stated 360-day basis (%)", "points": 1, "kind": "numeric", "expected": 5.391527599486521, "tolerance": 0.0051, "answerDisplay": "5.391528%", "solution": "Investment yield = (face - price)/price x (360/180) x 100 = 26,250/973,750 x 2 x 100 = 5.391528%, or 5.39%. Use purchase price as the denominator and the stated 360-day annualization. The workbook's bond-equivalent yield instead annualizes this return using 365. Spreadsheet: =(1000000-973750)/973750*360/180*100."}]}, {"id": "q3", "title": "Treasury modified Dutch auction", "points": 2, "practiceType": "dutch-auction", "prompt": "The Treasury offers $3,000,000 of bills in a uniform-price (modified Dutch) auction. Noncompetitive bids total $300,000 and are accepted first. Fill competitive bids from lowest yield upward, allowing a partial fill at the stop-out yield. All accepted bids receive the stop-out yield. All bids are valid; amounts are face values.", "table": {"headers": ["Bidder", "Face value bid", "Annual discount yield"], "rows": [["A", "$800,000", "3.00%"], ["B", "$1,000,000", "3.10%"], ["C", "$1,200,000", "3.20%"], ["D", "$700,000", "3.30%"]]}, "fields": [{"id": "q3a", "label": "a. Competitive capacity ($)", "points": 0.25, "kind": "numeric", "expected": 2700000, "tolerance": 0.011, "answerDisplay": "$2,700,000", "solution": "Competitive capacity = 3,000,000 - 300,000 = $2,700,000."}, {"id": "q3bidA", "label": "b. Accepted face value for bidder A ($)", "points": 0.25, "kind": "numeric", "expected": 800000, "tolerance": 0.011, "answerDisplay": "$800,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidB", "label": "b. Accepted face value for bidder B ($)", "points": 0.25, "kind": "numeric", "expected": 1000000, "tolerance": 0.011, "answerDisplay": "$1,000,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidC", "label": "b. Accepted face value for bidder C ($)", "points": 0.25, "kind": "numeric", "expected": 900000, "tolerance": 0.011, "answerDisplay": "$900,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidD", "label": "b. Accepted face value for bidder D ($)", "points": 0.25, "kind": "numeric", "expected": 0, "tolerance": 0.011, "answerDisplay": "$0", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3c", "label": "c. Stop-out yield (%)", "points": 0.25, "kind": "numeric", "expected": 3.2, "tolerance": 0.0051, "answerDisplay": "3.20%", "solution": "C is the marginal accepted bidder at 3.20%; it receives a partial fill."}, {"id": "q3d", "label": "d. Yield received by all accepted bidders (%)", "points": 0.25, "kind": "numeric", "expected": 3.2, "tolerance": 0.0051, "answerDisplay": "3.20%", "solution": "All successful competitive and noncompetitive bids receive 3.20% under the uniform-price rule."}, {"id": "q3e", "label": "e. Percentage of C's requested face value accepted (%)", "points": 0.25, "kind": "numeric", "expected": 75, "tolerance": 0.0051, "answerDisplay": "75.00%", "solution": "Partial fill = 900,000 / 1,200,000 x 100 = 75.00%."}]}, {"id": "q4", "title": "ROA ROE and leverage", "points": 2, "practiceType": "bank-performance", "prompt": "A bank has annual net income of $6.4 million, average assets of $640 million and average book equity of $80 million. Use consistent average balance-sheet values. Leverage means the equity multiplier.", "fields": [{"id": "q4a", "label": "a. ROA (%)", "points": 0.5, "kind": "numeric", "expected": 1, "tolerance": 0.0051, "answerDisplay": "1.00%", "solution": "ROA = net income / average assets x 100 = 6.4 / 640 x 100 = 1.00%."}, {"id": "q4b", "label": "b. ROE (%)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00%", "solution": "ROE = net income / average equity x 100 = 6.4 / 80 x 100 = 8.00%."}, {"id": "q4c", "label": "c. Equity multiplier (times)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00 times", "solution": "Equity multiplier = average assets / average equity = 640 / 80 = 8.00 times."}, {"id": "q4d", "label": "d. ROA multiplied by equity multiplier (%)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00%", "solution": "ROA x equity multiplier = 1.00% x 8.00 = 8.00%, equal to ROE."}]}]};
 let currentState = null, currentKey = '', questions = [];
 let sessionFrozen = false, timerId = null, startedInThisPage = false;
 const enc = new TextEncoder();
@@ -432,12 +437,12 @@ function renderQuestions() {
       content+='<h3>Part A — match definitions</h3><p>Choose one letter for each item. Each definition is used once. Each match is worth 0.25 point.</p><dl>'+q.definitions.map(([letter,text])=>`<dt><strong>Definition ${letter}</strong></dt><dd>${esc(text)}</dd>`).join('')+'</dl>';
     }
     for(const f of q.fields) {
-      if(f.id==='q6r1') content+='<h3>Part B — order the supplied rates</h3><table><caption>Hypothetical annual rates for this question</caption><thead><tr><th scope="col">Rate or facility</th><th scope="col">Supplied annual rate</th></tr></thead><tbody>'+q.rates.map(([term,rate])=>`<tr><th scope="row">${esc(term)}</th><td>${rate.toFixed(2)}%</td></tr>`).join('')+'</tbody></table><p>Choose 1 for the lowest value, then 2, 3, 4, and 5 for the highest value. Give tied rates the same rank. Both highest rates receive rank 5. Each correct rank is worth 0.25 point.</p>';
+      if(f.id==='q6b1') content+='<h3>Part B — explain rate incentives and market differences</h3><p>Choose the best explanation. Each question is worth 0.5 point.</p>';
       content+=`<div class="field"><label for="${f.id}">${esc(f.label)} (${f.points} pt)</label>`;
-      content+=f.kind==='select' ? `<select id="${f.id}" data-answer="${f.id}"><option value="">Select an answer</option>${f.options.map(([v,label])=>`<option value="${esc(v)}">${esc(label)}</option>`).join('')}</select>` : `<textarea class="answer" id="${f.id}" data-answer="${f.id}" spellcheck="false" maxlength="15000"></textarea>`;
+      content+=f.kind==='select' ? `<select id="${f.id}" data-answer="${f.id}"><option value="">Select an answer</option>${f.options.map(([v,label])=>`<option value="${esc(v)}">${esc(label)}</option>`).join('')}</select>` : f.kind==='numeric' ? `<input class="numeric-answer" id="${f.id}" data-answer="${f.id}" type="text" inputmode="decimal" autocomplete="off" maxlength="80">` : `<textarea class="answer" id="${f.id}" data-answer="${f.id}" spellcheck="false" maxlength="15000"></textarea>`;
       content+='</div>';
     }
-    if(!q.definitions&&!SETTINGS.selfGrading) content+=`<div class="field"><label for="${q.id}_work">Calculations and explanation for question ${q.id.slice(1)} — include formulas or spreadsheet cell references</label><textarea class="answer work" id="${q.id}_work" data-answer="${q.id}_work" spellcheck="false" maxlength="25000"></textarea></div>`;
+    if(!q.definitions&&(!SETTINGS.selfGrading||SETTINGS.classroomPractice)) content+=`<div class="field"><label for="${q.id}_work">Calculations and explanation for question ${q.id.slice(1)} — include formulas or spreadsheet cell references</label><textarea class="answer work" id="${q.id}_work" data-answer="${q.id}_work" spellcheck="false" maxlength="25000"></textarea></div>`;
     return content+'</section>';
   }).join('');
   document.querySelectorAll('[data-answer]').forEach(el=>{
@@ -461,18 +466,33 @@ function freezeTools() {
   $('calcToggle').disabled=true; $('sheetToggle').disabled=true;
   $('calcPanel').classList.remove('open'); $('sheetPanel').classList.remove('open');
 }
+function numericPracticeAnswer(value) {
+  const cleaned=String(value).trim().replace(/[$,%\s]/g,'');
+  return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(cleaned)?Number(cleaned):NaN;
+}
+function practiceCorrect(field,answer) {
+  if(field.kind==='numeric') {const value=numericPracticeAnswer(answer);return Number.isFinite(value)&&Math.abs(value-field.expected)<=(field.tolerance??.011)+1e-10;}
+  return String(answer)===String(field.correct);
+}
+function submittedWorkHTML() {
+  const sections=questions.map(q=>`<section><h3>${q.id.slice(1)}. ${esc(q.title)}</h3>`+q.fields.map(f=>{const raw=currentState.answers[f.id]||'';const text=f.kind==='select'?(f.options.find(o=>o[0]===raw)||['','Unanswered'])[1]:raw||'Unanswered';return `<p><strong>${esc(f.label)}</strong></p><pre>${esc(text)}</pre>`;}).join('')+(currentState.answers[q.id+'_work']?`<p><strong>Your working</strong></p><pre>${esc(currentState.answers[q.id+'_work'])}</pre>`:'')+'</section>').join('');
+  const raw=currentState.sheet||{},computed=currentState.computedSheet||{};
+  const rows=Object.keys(raw).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).map(cell=>`<tr><th scope="row">${esc(cell)}</th><td>${esc(raw[cell])}</td><td>${esc(computed[cell]??'')}</td></tr>`).join('');
+  return sections+'<h3>Submitted spreadsheet</h3>'+(rows?'<div class="review-table-wrap"><table><caption>Your saved spreadsheet entries and calculated values</caption><thead><tr><th scope="col">Cell</th><th scope="col">Entry or formula</th><th scope="col">Calculated value</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<p>No spreadsheet entries.</p>')+'<h3>Submitted scratchpad</h3><pre>'+esc(currentState.scratchpad||'No scratchpad text.')+'</pre><h3>Last calculator expression</h3><pre>'+esc(currentState.calculator||'No calculator expression.')+'</pre>';
+}
 function showFinished() {
   sessionFrozen=true; clearInterval(timerId); freezeTools();
   $('landing').hidden=true; $('exam').hidden=true; $('finished').hidden=false;
   $('timerBar').classList.add('visible','expired'); $('timerBar').textContent='Answers finalized — download your submission file';
   $('finishedReason').textContent=(currentState.mode==='preview'?'INSTRUCTOR PREVIEW — UNGRADED. ':'')+'Finalized '+new Date(currentState.finalizedAt).toLocaleString()+' ('+currentState.reason+').';
   $('objectiveNotice').textContent='Your instructor will grade this 25-point exam. No score is released in the browser.';
-  if(SETTINGS.practice){$('objectiveNotice').textContent='This is an ungraded device rehearsal. Its file is not a graded exam submission.';$('restartPractice').hidden=false;}
+  $('submittedWorkBody').innerHTML=submittedWorkHTML();
+  if(SETTINGS.practice){$('objectiveNotice').textContent='This is ungraded practice. Its file is not a graded exam submission.';$('restartPractice').hidden=false;}
   if(SETTINGS.selfGrading){
     let score=0,total=0;
-    const feedback=questions.map(q=>{const f=q.fields[0],chosen=currentState.answers[f.id]||'',correct=chosen===f.correct;total+=f.points;if(correct)score+=f.points;const chosenLabel=(f.options.find(o=>o[0]===chosen)||['','Unanswered'])[1],rightLabel=f.options.find(o=>o[0]===f.correct)[1];return `<section><h3>${q.id.slice(1)}. ${esc(q.title)} — ${correct?'Correct':'Review'}</h3><p>Your answer: ${esc(chosenLabel)}</p><p>Correct answer: ${esc(rightLabel)}</p><p>${esc(f.solution)}</p></section>`;}).join('');
+    const feedback=questions.map(q=>'<section><h3>'+esc(q.id.slice(1)+'. '+q.title)+'</h3>'+q.fields.map(f=>{const chosen=currentState.answers[f.id]||'',correct=practiceCorrect(f,chosen);total+=f.points;if(correct)score+=f.points;const chosenLabel=f.kind==='select'?(f.options.find(o=>o[0]===chosen)||['','Unanswered'])[1]:chosen||'Unanswered';const rightLabel=f.kind==='select'?f.options.find(o=>o[0]===f.correct)[1]:f.answerDisplay;return `<h4>${esc(f.label)} — ${correct?'Correct':'Review'}</h4><p>Your answer: ${esc(chosenLabel)}</p><p><strong>Correct answer: ${esc(rightLabel)}</strong></p><p>${esc(f.solution)}</p>`;}).join('')+'</section>').join('');
     currentState.practiceScore={score,total};saveState(currentKey,currentState);
-    $('objectiveNotice').textContent=`Home practice score: ${score} / ${total} (${Math.round(100*score/total)}%). This is practice, not a course grade.`;
+    $('objectiveNotice').textContent=`Practice answer check: ${score} / ${total} (${Math.round(100*score/total)}%). This is not a course grade; written working is not automatically marked.`;
     $('selfGrade').hidden=false;$('selfGrade').innerHTML='<h2>Worked feedback</h2>'+feedback;
   }
   $('finished').focus();$('finished').scrollIntoView({block:'start'});
@@ -487,7 +507,7 @@ async function finalize(reason) {
 }
 function tick() {
   if(!activeExam()) return;
-  if(SETTINGS.practice){$('timerBar').textContent='Ungraded SEB rehearsal · answers save only in this browser';return;}
+  if(SETTINGS.practice){$('timerBar').textContent='Ungraded SEB practice · answers save only in this browser';return;}
   const remaining=currentState.deadline-Date.now();
   if(remaining<=0) {finalize('time expired');return;}
   const sec=Math.ceil(remaining/1000);
@@ -545,7 +565,7 @@ async function download() {
   const stem=currentState.email.split('@')[0].replace(/[^a-z0-9_-]/gi,'_');
   const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':''}${stem}.json`;
   triggerDownload(filename,file);
-  $('downloadStatus').textContent='Download requested: '+filename+(PRACTICE ? '. Confirm that the practice file was saved; follow the instructor\'s rehearsal instructions.' : '. Confirm that the file was saved, then upload it to Blackboard.');
+  $('downloadStatus').textContent='Download requested: '+filename+'. Save location: your Downloads folder (Windows: your user folder / Downloads; Mac: ~/Downloads). SEB can download while locked. After authorized exit, confirm the file exists'+(PRACTICE ? '. This is a practice file, not an exam submission.' : ' and upload it unchanged to Blackboard. A download alone does not submit the exam.')+' A repeated download may add a number to the filename. This page cannot verify completion on disk.';
 }
 function triggerDownload(filename,data) {
   const url=URL.createObjectURL(new Blob([data],{type:'application/json'})), a=document.createElement('a'); a.href=url;a.download=filename; document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -567,8 +587,9 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('beforeinput',e=>{if(activeExam()&&currentState.deadline&&Date.now()>=currentState.deadline){e.preventDefault();finalize('time expired');}},true);
 function initApplication() {
   $('calcToggle').classList.add('visible');$('sheetToggle').classList.add('visible');
-  if(SETTINGS.practice && !SETTINGS.selfGrading && !/SEB\//i.test(navigator.userAgent)){
-    const install=document.createElement('p');install.className='notice';install.innerHTML='Before class: install the institution-supported <a href="https://safeexambrowser.org/download_en.html" rel="noreferrer">Safe Exam Browser application</a>. It is an installed app, not a browser extension. Then download <a href="FIN4311_MT1_Practice.seb">Practice.seb</a> and open that file with SEB. No actual exam code is needed.';
+  if(SETTINGS.practice && !/SEB\//i.test(navigator.userAgent)){
+    const launch=SETTINGS.classroomPractice?'FIN4311_MT1_Practice.seb':'FIN4311_MT1_HomePractice.seb';
+    const install=document.createElement('p');install.className='notice';install.innerHTML='Install the institution-supported <a href="https://safeexambrowser.org/download_en.html" rel="noreferrer">Safe Exam Browser application</a> for Windows or Mac. Download <a href="'+launch+'">the practice launch file</a> and open it with SEB. No starting exam password is needed for practice. Practice exit password: <strong>practice4311</strong> (practice only).';
     $('landing').insertBefore(install,$('landing').children[1]);
   }
   // Formula cells and scratch work save on input, including an unfinished active edit.
