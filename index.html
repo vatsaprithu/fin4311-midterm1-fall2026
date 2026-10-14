@@ -344,7 +344,7 @@
     </details>
     <p>Open the calculator and compute 120 / 4. Open the spreadsheet, enter 100 in A1, 20 in A2, and =SUM(A1:A2) in A3. Confirm that A3 displays 120. Use the keyboard and resize the panels as needed.</p>
     <button type="button" id="setupDownload">Download a practice file</button>
-    <p>Request the JSON download, then exit the setup check using SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and practice4311. After exiting, confirm that the file is in Downloads. This password applies to setup and practice only. If any step fails, tell the proctor before exam day.</p>
+    <p>Request the JSON download. If needed, use Save JSON or Compatibility download. Exit the setup check using SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and practice4311. Confirm the file in Downloads on Windows/Mac, or Files &gt; On My iPad &gt; SafeExamBrowser on iPad. This password applies to setup and practice only. If any step fails, tell the proctor before exam day.</p>
     <p id="setupNote" role="status"></p>
   </section>
   <section id="exam" hidden aria-label="Exam questions">
@@ -584,11 +584,38 @@ async function download() {
   const stem=currentState.email.split('@')[0].replace(/[^a-z0-9_-]/gi,'_');
   const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':''}${stem}.json`;
   triggerDownload(filename,file);
-  $('downloadStatus').textContent='Download requested: '+filename+'. Save location: your Downloads folder (Windows: your user folder / Downloads; Mac: ~/Downloads). SEB can download while locked. After authorized exit, confirm the file exists'+(PRACTICE ? '. This is a practice file, not an exam submission.' : ' and upload it unchanged to Blackboard. A download alone does not submit the exam.')+' A repeated download may add a number to the filename. This page cannot verify completion on disk.';
+  $('downloadStatus').textContent='Download requested: '+filename+'. If needed, use Save JSON or Compatibility download below. Windows/Mac: Downloads. iPad: Files > On My iPad > SafeExamBrowser. After authorized exit, confirm the file exists'+(PRACTICE ? '. This is a practice file, not an exam submission.' : ' and upload it unchanged to Blackboard; verify the upload receipt before leaving. A download alone does not submit the exam.')+' A repeated download may add a number to the filename. This page cannot verify completion on disk. If no file saved, keep the same device/profile and tell the proctor; finalized answers can be downloaded again.';
 }
 function triggerDownload(filename,data) {
-  const url=URL.createObjectURL(new Blob([data],{type:'application/json'})), a=document.createElement('a'); a.href=url;a.download=filename; document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  return requestJSONFile(filename,data,$('finished').hidden?$('setup'):$('finished'));
 }
+// JSON export stays on this device. Genuine links remain usable if an automatic
+// request is refused. Blob objects are kept alive for this document's lifetime;
+// early revocation can race native WebKit's asynchronous download handling.
+function jsonDataURL(text) {
+  const bytes=new TextEncoder().encode(text);
+  let binary='';for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);
+  return 'data:application/json;charset=utf-8;base64,'+encodeURIComponent(btoa(binary));
+}
+function requestJSONFile(filename,text,host,autoRequest=true) {
+  if(!host)throw Error('Download controls are unavailable. Keep this page open and contact the proctor.');
+  let controls=document.getElementById('jsonDownloadAlternatives');
+  if(!controls){controls=document.createElement('div');controls.id='jsonDownloadAlternatives';host.appendChild(controls);}
+  controls.replaceChildren();
+  const note=document.createElement('p');
+  note.textContent='The file is prepared locally. If the automatic request does not save it, click Save JSON below. If that is blocked, try the compatibility download. Confirm the file exists after authorized exit; this page cannot verify a disk save.';
+  controls.appendChild(note);
+  const blobURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  const primary=document.createElement('a');primary.id='jsonDownloadLink';primary.href=blobURL;primary.download=filename;primary.textContent='Save JSON';
+  const alternate=document.createElement('a');alternate.id='jsonCompatibilityLink';alternate.href=jsonDataURL(text);alternate.download=filename;alternate.textContent='Compatibility JSON download';
+  for(const link of [primary,alternate]){
+    link.style.cssText='display:inline-block;margin:0 12px 12px 0;padding:12px;border:2px solid #111;color:#111;background:#fff;font-weight:bold;text-decoration:underline;';
+    link.setAttribute('aria-label',link.textContent+' — '+filename);controls.appendChild(link);
+  }
+  if(autoRequest)primary.click();
+  return {filename,blobURL,compatibilityURL:alternate.href,requested:!!autoRequest};
+}
+
 $('beginBtn').addEventListener('click',begin);
 $('submitBtn').addEventListener('click',()=>{if(!$('ready').checked){$('submitError').textContent='Check the finalization box after reviewing your answers.';return;}finalize('student submitted');});
 $('downloadBtn').addEventListener('click',download);
