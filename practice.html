@@ -330,6 +330,7 @@
   </section>
   <section id="exam" hidden aria-label="Exam questions">
     <p id="previewFlag" class="notice" hidden>INSTRUCTOR PREVIEW — UNGRADED</p>
+    <p id="contingencyFlag" class="notice" role="status" hidden>SUPERVISED BROWSER CONTINGENCY — GRADED. The proctor must closely supervise this session; browser lockdown is unavailable.</p>
     <p id="saveStatus" role="status">Saving locally</p>
     <nav id="questionNav" aria-label="Jump to a question"></nav>
     <div id="questions"></div>
@@ -350,7 +351,7 @@
     <button type="button" id="downloadBtn">Download final submission</button>
     <button type="button" id="restartPractice" hidden>Start a new practice session</button>
     <p id="downloadStatus" role="status"></p>
-    <p>After your practice file has saved, use SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and enter practice4311. After exiting, find the file in Downloads. This password works only with the practice configurations.</p>
+    <p id="exitInstructions">After your practice file has saved, use SEB's Quit control (Ctrl+Q on Windows or Command+Q on Mac) and enter practice4311. After exiting, find the file in Downloads. This password works only with the practice configurations.</p>
   </section>
   <p class="privacy-note">Local saving only. Clearing browser data, changing devices, or losing the SEB browser profile can remove saved work. Tell the proctor promptly if anything fails.</p>
 </main>
@@ -403,7 +404,7 @@
   @media(max-width:720px) {#timerBar {padding-right:8px; padding-bottom:50px;} body.quiz-active{padding-top:92px;} body.quiz-active #calcToggle,body.quiz-active #sheetToggle{top:44px;} .panel-reset {top:86px;} .wrap{padding-left:10px;padding-right:10px;} .card{padding:16px;} }
 </style>
 <script>
-const SETTINGS = {"examId": "FIN4311_CLASS_DEMO_V2", "schema": "FIN4311-written-v1", "start": "2026-10-15T10:30:00-06:00", "end": "2026-10-15T11:50:00-06:00", "questionDigest": "815af3b43d796d3d4313fb3ebe88861019d3b0805ca04f221cbd1c0dac7c34fb", "proctorSalt": "b2c1db9a4478c5adbf662ccfc051d1c6", "proctorHash": "8237d5f56c997879c4fb5e9b738915903958020004207a91b89baff316dfef8c", "practice": true, "selfGrading": true, "classroomPractice": true, "requireSEB": true};
+const SETTINGS = {"examId": "FIN4311_CLASS_DEMO_V2", "schema": "FIN4311-written-v1", "start": "2026-10-15T10:30:00-06:00", "end": "2026-10-15T11:50:00-06:00", "questionDigest": "815af3b43d796d3d4313fb3ebe88861019d3b0805ca04f221cbd1c0dac7c34fb", "proctorSalt": "b2c1db9a4478c5adbf662ccfc051d1c6", "proctorHash": "099ab209cca82afaecf2179d2bca6e5cf43726b6627ba95dbe9f3392752e1a21", "practice": true, "selfGrading": true, "classroomPractice": true, "requireSEB": true};
 const ENCRYPTED = null;
 const PRACTICE = {"examId": "FIN4311_CLASS_DEMO_V2", "questions": [{"id": "q1", "title": "Quarterly compounding", "points": 2, "practiceType": "compounding", "prompt": "A customer deposits $180,000 for six months at an 8.00% nominal annual rate compounded quarterly. There are four periods per year and two periods in this investment. Keep full precision until the final answers. Enter percentage answers as percentage numbers, for example 2 for 2%. Show your calculations in the working box or spreadsheet.", "fields": [{"id": "q1a", "label": "a. Quarterly periodic rate (%)", "points": 0.5, "kind": "numeric", "expected": 2, "tolerance": 0.0051, "answerDisplay": "2.00%", "solution": "Quarterly rate = 8.00% / 4 = 2.00%, or 0.02 as a decimal."}, {"id": "q1b", "label": "b. Ending balance ($)", "points": 1, "kind": "numeric", "expected": 187272.0, "tolerance": 0.011, "answerDisplay": "$187,272.00", "solution": "FV = 180,000(1 + 0.08/4)^2 = $187,272.00. Spreadsheet: =180000*(1+0.08/4)^2."}, {"id": "q1c", "label": "c. Interest earned ($)", "points": 0.5, "kind": "numeric", "expected": 7272.0, "tolerance": 0.011, "answerDisplay": "$7,272.00", "solution": "Interest = FV - principal = 187,272.00 - 180,000 = $7,272.00."}]}, {"id": "q2", "title": "Treasury bill price and investment yield", "points": 2, "practiceType": "treasury-bill", "prompt": "A Treasury bill has $1,000,000 face value, 180 days to maturity and a 5.25% annual bank discount yield. Use face value and a 360-day basis for price. For this question, calculate the simple annualized investment yield using purchase price and a 360-day basis. The investor holds it to maturity.", "fields": [{"id": "q2a", "label": "a. Purchase price ($)", "points": 1, "kind": "numeric", "expected": 973750.0, "tolerance": 0.011, "answerDisplay": "$973,750.00", "solution": "Discount = 1,000,000 x 0.0525 x (180/360) = $26,250. Price = 1,000,000 - 26,250 = $973,750.00. Spreadsheet: =1000000*(1-0.0525*180/360)."}, {"id": "q2b", "label": "b. Simple annualized investment yield, stated 360-day basis (%)", "points": 1, "kind": "numeric", "expected": 5.391527599486521, "tolerance": 0.0051, "answerDisplay": "5.391528%", "solution": "Investment yield = (face - price)/price x (360/180) x 100 = 26,250/973,750 x 2 x 100 = 5.391528%, or 5.39%. Use purchase price as the denominator and the stated 360-day annualization. The workbook's bond-equivalent yield instead annualizes this return using 365. Spreadsheet: =(1000000-973750)/973750*360/180*100."}]}, {"id": "q3", "title": "Treasury modified Dutch auction", "points": 2, "practiceType": "dutch-auction", "prompt": "The Treasury offers $3,000,000 of bills in a uniform-price (modified Dutch) auction. Noncompetitive bids total $300,000 and are accepted first. Fill competitive bids from lowest yield upward, allowing a partial fill at the stop-out yield. All accepted bids receive the stop-out yield. All bids are valid; amounts are face values.", "table": {"headers": ["Bidder", "Face value bid", "Annual discount yield"], "rows": [["A", "$800,000", "3.00%"], ["B", "$1,000,000", "3.10%"], ["C", "$1,200,000", "3.20%"], ["D", "$700,000", "3.30%"]]}, "fields": [{"id": "q3a", "label": "a. Competitive capacity ($)", "points": 0.25, "kind": "numeric", "expected": 2700000, "tolerance": 0.011, "answerDisplay": "$2,700,000", "solution": "Competitive capacity = 3,000,000 - 300,000 = $2,700,000."}, {"id": "q3bidA", "label": "b. Accepted face value for bidder A ($)", "points": 0.25, "kind": "numeric", "expected": 800000, "tolerance": 0.011, "answerDisplay": "$800,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidB", "label": "b. Accepted face value for bidder B ($)", "points": 0.25, "kind": "numeric", "expected": 1000000, "tolerance": 0.011, "answerDisplay": "$1,000,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidC", "label": "b. Accepted face value for bidder C ($)", "points": 0.25, "kind": "numeric", "expected": 900000, "tolerance": 0.011, "answerDisplay": "$900,000", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3bidD", "label": "b. Accepted face value for bidder D ($)", "points": 0.25, "kind": "numeric", "expected": 0, "tolerance": 0.011, "answerDisplay": "$0", "solution": "Accept A $800,000 and B $1,000,000 first. Remaining capacity = 2,700,000 - 800,000 - 1,000,000 = $900,000. C receives $900,000 of its $1,200,000 bid; D receives zero."}, {"id": "q3c", "label": "c. Stop-out yield (%)", "points": 0.25, "kind": "numeric", "expected": 3.2, "tolerance": 0.0051, "answerDisplay": "3.20%", "solution": "C is the marginal accepted bidder at 3.20%; it receives a partial fill."}, {"id": "q3d", "label": "d. Yield received by all accepted bidders (%)", "points": 0.25, "kind": "numeric", "expected": 3.2, "tolerance": 0.0051, "answerDisplay": "3.20%", "solution": "All successful competitive and noncompetitive bids receive 3.20% under the uniform-price rule."}, {"id": "q3e", "label": "e. Percentage of C's requested face value accepted (%)", "points": 0.25, "kind": "numeric", "expected": 75, "tolerance": 0.0051, "answerDisplay": "75.00%", "solution": "Partial fill = 900,000 / 1,200,000 x 100 = 75.00%."}]}, {"id": "q4", "title": "ROA ROE and leverage", "points": 2, "practiceType": "bank-performance", "prompt": "A bank has annual net income of $6.4 million, average assets of $640 million and average book equity of $80 million. Use consistent average balance-sheet values. Leverage means the equity multiplier.", "fields": [{"id": "q4a", "label": "a. ROA (%)", "points": 0.5, "kind": "numeric", "expected": 1, "tolerance": 0.0051, "answerDisplay": "1.00%", "solution": "ROA = net income / average assets x 100 = 6.4 / 640 x 100 = 1.00%."}, {"id": "q4b", "label": "b. ROE (%)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00%", "solution": "ROE = net income / average equity x 100 = 6.4 / 80 x 100 = 8.00%."}, {"id": "q4c", "label": "c. Equity multiplier (times)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00 times", "solution": "Equity multiplier = average assets / average equity = 640 / 80 = 8.00 times."}, {"id": "q4d", "label": "d. ROA multiplied by equity multiplier (%)", "points": 0.5, "kind": "numeric", "expected": 8, "tolerance": 0.0051, "answerDisplay": "8.00%", "solution": "ROA x equity multiplier = 1.00% x 8.00 = 8.00%, equal to ROE."}]}]};
 let currentState = null, currentKey = '', questions = [];
@@ -484,7 +485,8 @@ function showFinished() {
   sessionFrozen=true; clearInterval(timerId); freezeTools();
   $('landing').hidden=true; $('exam').hidden=true; $('finished').hidden=false;
   $('timerBar').classList.add('visible','expired'); $('timerBar').textContent='Answers finalized — download your submission file';
-  $('finishedReason').textContent=(currentState.mode==='preview'?'INSTRUCTOR PREVIEW — UNGRADED. ':'')+'Finalized '+new Date(currentState.finalizedAt).toLocaleString()+' ('+currentState.reason+').';
+  $('finishedReason').textContent=(currentState.mode==='preview'?'INSTRUCTOR PREVIEW — UNGRADED. ':currentState.browserContingency?'SUPERVISED BROWSER CONTINGENCY — GRADED. ':'')+'Finalized '+new Date(currentState.finalizedAt).toLocaleString()+' ('+currentState.reason+').';
+  if(currentState.browserContingency && !/SEB\//i.test(navigator.userAgent)) $('exitInstructions').textContent='Keep this page open until the proctor confirms the saved JSON file and permits the Blackboard upload. This supervised Chrome session does not use the SEB quit password.';
   $('objectiveNotice').textContent='Your instructor will grade this 25-point exam. No score is released in the browser.';
   $('submittedWorkBody').innerHTML=submittedWorkHTML();
   if(SETTINGS.practice){$('objectiveNotice').textContent='This is ungraded practice. Its file is not a graded exam submission.';$('restartPractice').hidden=false;}
@@ -524,7 +526,10 @@ async function begin() {
     if(!Number.isInteger(minutes) || minutes<80 || minutes>240) throw Error('Approved minutes must be an integer from 80 to 240.');
     const authorized = await proctorOK(pc);
     if((mode==='preview'||minutes!==80) && !authorized) throw Error('The proctor must authorize preview or extended time.');
-    if(mode!=='preview' && SETTINGS.requireSEB!==false && !/SEB\//i.test(navigator.userAgent)) throw Error('Open this session using the Safe Exam Browser file.');
+    const contingencyRequested=mode==='exam' && !SETTINGS.practice && !!$('browserContingency')?.checked;
+    if(contingencyRequested && !authorized) throw Error('The proctor must authorize the supervised browser contingency.');
+    const browserContingency=contingencyRequested && authorized && !/SEB\//i.test(navigator.userAgent);
+    if(mode!=='preview' && SETTINGS.requireSEB!==false && !/SEB\//i.test(navigator.userAgent) && !browserContingency) throw Error('Open this session using the Safe Exam Browser file.');
     const key=SETTINGS.examId+'|'+mode+'|'+email;
     let previous; try {previous=JSON.parse(localStorage.getItem(key)||'null');}catch{throw Error('Saved data could not be read. Tell the proctor.');}
     if(previous && previous.schema!==SETTINGS.schema) throw Error('Saved work uses a different exam version. Tell the proctor.');
@@ -532,15 +537,20 @@ async function begin() {
     if(mode==='exam' && !previous && (now<Date.parse(SETTINGS.start) || now>=allowedEnd)) throw Error('The exam is outside its permitted window.');
     let payload;try {payload=SETTINGS.practice?PRACTICE:await decrypt(code);}catch{throw Error('The exam code is incorrect, or the encrypted file could not be opened.');}
     if(payload.examId!==SETTINGS.examId) throw Error('Incorrect exam package.');
-    questions=payload.questions; currentKey=key;
-    currentState=previous || {schema:SETTINGS.schema,examId:SETTINGS.examId,questionDigest:SETTINGS.questionDigest,mode,name,email,startedAt:stamp(),deadline:SETTINGS.practice?null:mode==='preview'?now+minutes*60000:Math.min(now+minutes*60000,allowedEnd),approvedMinutes:SETTINGS.practice?null:minutes,answers:{},sheet:{},scratchpad:'',calculator:'',events:[]};
-    if(previous && currentState.questionDigest!==SETTINGS.questionDigest) throw Error('The question version changed. Tell the proctor before proceeding.');
+    const nextState=previous || {schema:SETTINGS.schema,examId:SETTINGS.examId,questionDigest:SETTINGS.questionDigest,mode,name,email,startedAt:stamp(),deadline:SETTINGS.practice?null:mode==='preview'?now+minutes*60000:Math.min(now+minutes*60000,allowedEnd),approvedMinutes:SETTINGS.practice?null:minutes,answers:{},sheet:{},scratchpad:'',calculator:'',events:[]};
+    if(previous && nextState.questionDigest!==SETTINGS.questionDigest) throw Error('The question version changed. Tell the proctor before proceeding.');
+    questions=payload.questions; currentKey=key; currentState=nextState;
     sessionFrozen=!!currentState.finalizedAt;
+    if(browserContingency && !currentState.finalizedAt) {
+      currentState.browserContingency=true;
+      eventLog('proctor_browser_contingency','Proctor authorized supervised regular-browser delivery after critical SEB failure.');
+    }
     if(previous) eventLog('resume','Same browser profile; original deadline retained.');
     else eventLog('start',minutes!==80?'Proctor authorized '+minutes+' minutes.':'Standard 80-minute limit.');
     $('accessCode').value=''; $('proctorCode').value='';
     if(currentState.finalizedAt) {showFinished(); return;}
     $('landing').hidden=true; $('exam').hidden=false; $('previewFlag').hidden=mode!=='preview';
+    $('contingencyFlag').hidden=!currentState.browserContingency;
     document.body.classList.add('quiz-active'); $('timerBar').classList.add('visible');
     renderQuestions(); sheetLoad(); $('calcScratch').value=currentState.scratchpad||''; $('calcInput').value=currentState.calculator||''; calcTryEval();
     startedInThisPage=true; tick(); timerId=setInterval(tick,500);
@@ -556,6 +566,7 @@ function payloadForDownload() {
     finalizedAt:currentState.finalizedAt,reason:currentState.reason,
     answers:currentState.answers,spreadsheet:{raw:currentState.sheet,computed:currentState.computedSheet||{}},
     scratchpad:currentState.scratchpad,calculator:currentState.calculator,events:currentState.events,
+    ...(currentState.browserContingency?{browserContingency:true}:{}),
     ...(SETTINGS.selfGrading?{practiceScore:currentState.practiceScore}: {})};
 }
 async function download() {
@@ -563,7 +574,7 @@ async function download() {
   const data=payloadForDownload(), payload=JSON.stringify(data), checksum=await sha(payload);
   const file=JSON.stringify({checksumAlgorithm:'SHA-256 corruption check — not a digital signature',checksum,payload},null,2);
   const stem=currentState.email.split('@')[0].replace(/[^a-z0-9_-]/gi,'_');
-  const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':''}${stem}.json`;
+  const filename=`FIN4311_MT1_${SETTINGS.practice?'PRACTICE_':''}${currentState.mode==='preview'?'PREVIEW_':currentState.browserContingency?'CONTINGENCY_':''}${stem}.json`;
   triggerDownload(filename,file);
   $('downloadStatus').textContent='Download requested: '+filename+'. If needed, use Save JSON or Compatibility download below. Windows/Mac: Downloads. iPad: Files > On My iPad > SafeExamBrowser. After authorized exit, confirm the file exists'+(PRACTICE ? '. This is a practice file, not an exam submission.' : ' and upload it unchanged to Blackboard; verify the upload receipt before leaving. A download alone does not submit the exam.')+' A repeated download may add a number to the filename. This page cannot verify completion on disk. If no file saved, keep the same device/profile and tell the proctor; finalized answers can be downloaded again.';
 }
